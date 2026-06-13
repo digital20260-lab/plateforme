@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  /* Palette officielle Côte d Ivoire : Orange · Blanc · Vert
+     Avec des tons profonds pour le texte et des variantes utilitaires. */
+  --color-ink-50: #f6f7f4;
+  --color-ink-100: #ebede7;
+  --color-ink-200: #d2d6cb;
+  /* Tons texte renforcés pour une meilleure lisibilité */
+  --color-ink-300: #7f8778;
+  --color-ink-400: #5f685a;
+  --color-ink-500: #424b3e;
+  --color-ink-600: #2d3528;
+  --color-ink-700: #1f261b;
+  --color-ink-800: #1a1d18;
+  --color-ink-900: #0e100c;
+
+  /* Vert national (vert sapin profond, vivant) */
+  --color-forest-50: #ecf7f0;
+  --color-forest-100: #d3eddc;
+  --color-forest-200: #a7d9b8;
+  --color-forest-300: #74c08f;
+  --color-forest-400: #41a166;
+  --color-forest-500: #1f8744;
+  --color-forest-600: #156b35;
+  --color-forest-700: #0f5028;
+  --color-forest-800: #08361a;
+  --color-forest-900: #031b0d;
+
+  /* Orange national (orange vif et chaleureux) */
+  --color-orange-50: #fff3eb;
+  --color-orange-100: #ffe0cc;
+  --color-orange-200: #ffbe96;
+  --color-orange-300: #ff9456;
+  --color-orange-400: #ff6f1f;
+  --color-orange-500: #f15a00;
+  --color-orange-600: #c54600;
+  --color-orange-700: #983500;
+  --color-orange-800: #6a2400;
+  --color-orange-900: #3a1300;
+
+  --color-cream: #fefdfb;
+  --color-paper: #ffffff;
+}
+
+html, body {
+  font-family: var(--font-sans);
+  background: var(--color-cream);
+  color: var(--color-ink-900);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+}
+
+/*
+  Renforcement de contraste : certaines parties de l'interface
+  utilisent encore les classes Tailwind gray-* historiques.
+  On les rend plus lisibles sans devoir retoucher chaque composant.
+*/
+.text-gray-400 { color: #5f685a !important; }
+.text-gray-500 { color: #424b3e !important; }
+.text-gray-600 { color: #2d3528 !important; }
+.text-gray-700 { color: #1f261b !important; }
+.placeholder-gray-500::placeholder { color: #5f685a !important; }
+
+/* Texte secondaire : un peu plus dense et confortable à lire. */
+.text-ink-400 { color: var(--color-ink-400) !important; }
+.text-ink-500 { color: var(--color-ink-500) !important; }
+.text-ink-600 { color: var(--color-ink-600) !important; }
+
+body {
+  background-image:
+    radial-gradient(circle at 0% 0%, rgba(241, 90, 0, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 100% 0%, rgba(31, 135, 68, 0.05) 0%, transparent 45%);
+  background-attachment: fixed;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.025em;
+}
+
+.bg-grain {
+  background-image:
+    radial-gradient(rgba(14, 16, 12, 0.06) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.bg-stripes {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 12px,
+    rgba(255, 255, 255, 0.04) 12px,
+    rgba(255, 255, 255, 0.04) 13px
+  );
+}
+
+/* Bandeau drapeau ivoirien (orange / blanc / vert) discret */
+.bg-ci-flag {
+  background: linear-gradient(
+    90deg,
+    var(--color-orange-500) 0%,
+    var(--color-orange-500) 33.33%,
+    var(--color-paper) 33.33%,
+    var(--color-paper) 66.66%,
+    var(--color-forest-500) 66.66%,
+    var(--color-forest-500) 100%
+  );
+}
+
+.shadow-sticker {
+  box-shadow:
+    0 1px 0 0 rgba(14, 16, 12, 0.06),
+    0 4px 12px -2px rgba(14, 16, 12, 0.08),
+    0 0 0 1px rgba(14, 16, 12, 0.06);
+}
+
+.shadow-sticker-lg {
+  box-shadow:
+    0 1px 0 0 rgba(14, 16, 12, 0.08),
+    0 12px 32px -8px rgba(14, 16, 12, 0.14),
+    0 0 0 1px rgba(14, 16, 12, 0.08);
+}
+
+.stamp {
+  border: 1.5px solid currentColor;
+  border-radius: 0.4rem;
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-cream); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-200);
+  border-radius: 8px;
+  border: 2px solid var(--color-cream);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-ink-300); }

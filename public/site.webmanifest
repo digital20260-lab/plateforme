@@ -1,0 +1,23 @@
+{
+  "name": "Emploi Concours CI",
+  "short_name": "EC CI",
+  "description": "Offres d'emploi et concours en Côte d'Ivoire",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f15a00",
+  "lang": "fr-CI",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

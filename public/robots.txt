@@ -1,0 +1,13 @@
+# ============================================================
+# robots.txt — emploi-concours.ci
+# Tous les moteurs sont les bienvenus sur le contenu public.
+# ============================================================
+User-agent: *
+Allow: /
+
+# Pas d'indexation de l'espace personnel
+Disallow: /#compte
+Disallow: /#abonnement
+
+# Sitemap
+Sitemap: https://emploi-concours.ci/sitemap.xml

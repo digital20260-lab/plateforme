@@ -1,0 +1,36 @@
+# ============================================================
+# SÉCURITÉ — ne JAMAIS committer de secrets
+# ============================================================
+.env
+.env.local
+.env.production
+.env.development
+*.pem
+*.key
+
+# Dépendances
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Builds
+dist/
+.next/
+out/
+build/
+
+# Données locales du collecteur (contiennent des emails utilisateurs)
+backend/data/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
