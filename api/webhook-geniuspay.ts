@@ -43,7 +43,7 @@ export default async function handler(req: any, res: any) {
   const metadata = payment?.metadata || body?.metadata || {};
   console.log('=== STEP 6: metadata', JSON.stringify(metadata));
 
-  const userId = String(metadata.userId || '');
+  const userId = String(metadata.user_id || '');
   console.log('=== STEP 7: userId', userId);
 
   const reference = String(payment?.reference || payment?.transaction_id || body?.reference || '');
