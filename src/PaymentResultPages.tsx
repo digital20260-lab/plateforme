@@ -17,9 +17,22 @@ export function PaymentSuccessPage({ onGoAccount, onRefreshProfile, documentTitl
     const t = window.setTimeout(async () => {
       await onRefreshProfile().catch(() => {});
       setLoading(false);
+      // Auto-download document 1.5s after profile refresh if it's a document payment
+      if (isDocumentPayment && onDownloadDocument) {
+        const downloadTimer = window.setTimeout(async () => {
+          setDownloading(true);
+          try {
+            await onDownloadDocument();
+          } catch (err) {
+            console.error('Auto-download failed:', err);
+          }
+          setDownloading(false);
+        }, 1500);
+        return () => window.clearTimeout(downloadTimer);
+      }
     }, 2500);
     return () => window.clearTimeout(t);
-  }, [onRefreshProfile]);
+  }, [onRefreshProfile, isDocumentPayment, onDownloadDocument]);
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4">

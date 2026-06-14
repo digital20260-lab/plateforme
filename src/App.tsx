@@ -272,6 +272,7 @@ function App() {
 
   // Authentification + tracking quiz
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [isHydrating, setIsHydrating] = useState(true); // Prevent auth flash on refresh
   const [authError, setAuthError] = useState('');
   const [authInfo, setAuthInfo] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
@@ -321,17 +322,31 @@ function App() {
   // Session Supabase réelle uniquement (aucune connexion locale/démo).
   useEffect(() => {
     localStorage.removeItem('ecci.user'); // Nettoyage des anciennes sessions locales
-    if (!supabase) return;
+    if (!supabase) {
+      setIsHydrating(false);
+      return;
+    }
 
-    mapSupabaseUser().then(setCurrentUser).catch(() => setCurrentUser(null));
+    // Check initial session
+    mapSupabaseUser()
+      .then(user => {
+        setCurrentUser(user);
+        setIsHydrating(false);
+      })
+      .catch(() => {
+        setCurrentUser(null);
+        setIsHydrating(false);
+      });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (!session?.user) {
         setCurrentUser(null);
+        setIsHydrating(false);
         return;
       }
       const mapped = await mapSupabaseUser().catch(() => null);
       setCurrentUser(mapped);
+      setIsHydrating(false);
     });
 
     return () => subscription.unsubscribe();
@@ -546,6 +561,15 @@ function App() {
   };
 
   const activeFiltersCount = [filterSector, filterContract, filterLocation, filterLevel, filterExperience, filterPublishedWithin].filter(Boolean).length;
+
+  // Prevent auth modal flash during hydration
+  if (isHydrating) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-ink-600">Chargement...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen text-[#14130d]">
