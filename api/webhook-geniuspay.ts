@@ -11,9 +11,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const body = req.body
     console.log('body:', JSON.stringify(body))
 
-    const metadata = body?.metadata || {}
+    const data = body?.data || body
+    const metadata = data?.metadata || body?.metadata || {}
     const userId = metadata.user_id
-    const reference = body?.reference
+    const reference = data?.reference || body?.reference
     const event = req.headers['x-webhook-event']
 
     console.log('userId:', userId)
