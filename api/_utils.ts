@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 
 type JsonBody = Record<string, unknown>;
 
-const APP_URL = process.env.VITE_APP_URL || 'https://emploi-concours.vercel.app';
+const APP_URL = process.env.APP_URL || process.env.VITE_APP_URL || 'https://plateforme-pi.vercel.app';
 const GENIUSPAY_ENDPOINT = 'https://pay.genius.ci/api/v1/merchant/payments';
 
 export function setSecurityHeaders(res: any) {
