@@ -27,7 +27,7 @@ export default async function handler(req: any, res: any) {
       description: 'Abonnement Premium Emploi Concours CI',
       userEmail,
       userName,
-      metadata: { userId, kind: 'abonnement', reference: 'premium' },
+      metadata: { user_id: userId, kind: 'abonnement', reference: 'premium' },
       successUrl: `${process.env.VITE_APP_URL || 'https://plateforme-pi.vercel.app'}/paiement/succes?kind=abonnement`,
       errorUrl: `${process.env.VITE_APP_URL || 'https://plateforme-pi.vercel.app'}/paiement/echec?kind=abonnement`
     });

@@ -40,7 +40,7 @@ export default async function handler(req: any, res: any) {
       description: `Achat document — ${paperTitle}`,
       userEmail,
       userName,
-      metadata: { userId, kind: 'sujet', reference: paperId },
+      metadata: { user_id: userId, kind: 'sujet', reference: paperId },
       successUrl: `${process.env.VITE_APP_URL || 'https://plateforme-pi.vercel.app'}/paiement/succes?kind=sujet&paperId=${encodeURIComponent(paperId)}`,
       errorUrl: `${process.env.VITE_APP_URL || 'https://plateforme-pi.vercel.app'}/paiement/echec?kind=sujet&paperId=${encodeURIComponent(paperId)}`
     });
