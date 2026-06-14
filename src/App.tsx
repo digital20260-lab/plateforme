@@ -15,6 +15,7 @@ import { ListingDetailsPage } from './ListingDetailsPage';
 import { ResetPasswordPage } from './ResetPasswordPage';
 import { PaymentSuccessPage, PaymentErrorPage } from './PaymentResultPages';
 import { usePayment } from './hooks/usePayment';
+import { useInactivityLogout } from './hooks/useInactivityLogout';
 import { applySeo, homeSeo, listingSeo, PAGE_SEO } from './lib/seo';
 import { supabase, signIn, signUp, getMyProfile, updateMyProfile, signOut } from './lib/supabaseClient';
 import clsx from 'clsx';
@@ -351,6 +352,18 @@ function App() {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // Déconnexion automatique après 5 minutes d'inactivité (seulement si connecté)
+  useInactivityLogout({
+    timeoutMinutes: 5,
+    onLogout: async () => {
+      if (isAuthenticated) {
+        await handleLogout();
+        setAuthInfo('Votre session a expiré en raison d\'une inactivité prolongée.');
+        navigate({ page: 'home' });
+      }
+    }
+  });
 
   const isAuthenticated = !!currentUser;
   const isPaid = currentUser?.plan === 'premium';
