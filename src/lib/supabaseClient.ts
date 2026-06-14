@@ -18,11 +18,37 @@ const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
 /**
+ * Storage personnalisé basé sur sessionStorage pour isoler les sessions par onglet.
+ * Chaque onglet du navigateur a sa propre session indépendante.
+ */
+class SessionStorageAdapter {
+  async getItem(key: string): Promise<string | null> {
+    return sessionStorage.getItem(key);
+  }
+
+  async setItem(key: string, value: string): Promise<void> {
+    sessionStorage.setItem(key, value);
+  }
+
+  async removeItem(key: string): Promise<void> {
+    sessionStorage.removeItem(key);
+  }
+}
+
+/**
  * Client nul tant que les clés ne sont pas configurées :
  * l'authentification réelle est alors indisponible.
+ * 
+ * Utilise sessionStorage pour que chaque onglet ait sa propre session,
+ * permettant plusieurs comptes connectés sur le même navigateur.
  */
 export const supabase: SupabaseClient | null =
-  url && anonKey ? createClient(url, anonKey) : null;
+  url && anonKey ? createClient(url, anonKey, {
+    auth: {
+      storage: new SessionStorageAdapter(),
+      persistSession: true
+    }
+  }) : null;
 
 export const isSupabaseConfigured = (): boolean => supabase !== null;
 
