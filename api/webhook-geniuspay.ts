@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
+import type { VercelRequest, VercelResponse } from '@vercel/node'
 
-export default async function handler(req, res) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log('=== WEBHOOK RECU ===')
   console.log('event:', req.headers['x-webhook-event'])
 
@@ -20,8 +21,8 @@ export default async function handler(req, res) {
 
     if (event === 'payment.success' && userId) {
       const supabase = createClient(
-        process.env.SUPABASE_URL,
-        process.env.SUPABASE_SERVICE_ROLE_KEY
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
       )
 
       const expiry = new Date()
@@ -44,7 +45,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ received: true })
 
-  } catch (err) {
+  } catch (err: any) {
     console.error('erreur:', err.message)
     return res.status(200).json({ received: true })
   }
