@@ -32,7 +32,7 @@ export default async function handler(req: any, res: any) {
     const amount = Number(payment.amount || payload.amount || 0);
     const metadata = payment.metadata || payload.metadata || {};
 
-    const userId = String(metadata.user_id || metadata.userId || '');
+    const userId = String(metadata.userId || metadata.user_id || '');
     const kind = String(metadata.kind || '');
     const reference = String(metadata.reference || metadata.paperId || kind || '');
 
@@ -68,6 +68,21 @@ export default async function handler(req: any, res: any) {
     if (payError) {
       console.error('Supabase error (payments upsert):', payError);
       throw payError;
+    }
+
+    // Si paiement réussi, mettre à jour explicitement la ligne payments
+    if (isSuccess) {
+      console.log('=== UPDATE PAYMENTS status accepted for transactionRef:', transactionRef);
+      const { data: paymentsUpdateData, error: paymentsUpdateError } = await supabase
+        .from('payments')
+        .update({ status: 'accepted', validated_at: new Date().toISOString() })
+        .eq('geniuspay_transaction_id', transactionRef)
+        .select();
+      console.log('Résultat payments update:', JSON.stringify({ paymentsUpdateData, paymentsUpdateError }));
+      if (paymentsUpdateError) {
+        console.error('Supabase error (payments update):', paymentsUpdateError);
+        throw paymentsUpdateError;
+      }
     }
 
     if (isSuccess && kind === 'abonnement') {
