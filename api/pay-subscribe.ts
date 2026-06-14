@@ -6,7 +6,7 @@ import {
   safeError,
   setSecurityHeaders,
   verifySupabaseJwt
-} from './_utils';
+} from './_utils.js';
 
 export default async function handler(req: any, res: any) {
   setSecurityHeaders(res);

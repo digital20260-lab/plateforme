@@ -4,7 +4,7 @@ import {
   requirePost,
   setSecurityHeaders,
   verifyGeniusPaySignature
-} from './_utils';
+} from './_utils.js';
 
 export const config = { api: { bodyParser: false } };
 

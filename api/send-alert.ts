@@ -1,5 +1,5 @@
 import { sendEmail } from '../src/lib/resend';
-import { requirePost, safeError, setSecurityHeaders, parseJsonBody } from './_utils';
+import { requirePost, safeError, setSecurityHeaders, parseJsonBody } from './_utils.js';
 
 export default async function handler(req: any, res: any) {
   setSecurityHeaders(res);
