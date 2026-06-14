@@ -1,4 +1,4 @@
-import crypto from 'node:crypto';
+import * as crypto from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
 
 type JsonBody = Record<string, unknown>;
@@ -134,7 +134,7 @@ export async function createGeniusPayCheckout(input: {
     })
   });
 
-  const json = await response.json().catch(() => null);
+  const json = (await response.json().catch(() => null)) as any;
   if (!response.ok || !json?.success || !json?.data) throw new Error('geniuspay_create_failed');
   return json.data;
 }
