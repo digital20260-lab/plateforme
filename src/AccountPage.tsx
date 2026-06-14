@@ -167,7 +167,6 @@ function AccountContent({ user, onUpdate, onLogout, onBack, quizUsedToday, isPai
 
       {/* En-tête du compte */}
       <header className="bg-white border-b border-ink-100 relative overflow-hidden">
-        <div className="absolute top-0 inset-x-0 h-1 bg-ci-flag"></div>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-forest-700 text-white flex items-center justify-center font-display font-bold text-2xl">
