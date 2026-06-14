@@ -46,8 +46,14 @@ export function SubscribePage({ plan, user, onBack }: Props) {
     
     try {
       await subscribeToPremium(user);
-    } catch {
-      alert('Une erreur est survenue');
+      setStep('success');
+    } catch (err: any) {
+      const errorMsg = err?.message || '';
+      if (errorMsg.includes('already')) {
+        alert('Vous avez déjà un abonnement actif.');
+      } else {
+        alert('Erreur lors du paiement. Veuillez réessayer.');
+      }
       setStep('details');
     }
   };

@@ -31,8 +31,15 @@ export function PaperPage({ paper, user, onBack, onLogin }: Props) {
         await downloadDocument(paper);
         setStep('success');
       }
-    } catch {
-      alert('Une erreur est survenue');
+    } catch (err: any) {
+      const errorMsg = err?.message || '';
+      if (errorMsg.includes('already')) {
+        alert('Vous avez déjà acheté ce document.');
+      } else if (errorMsg.includes('network')) {
+        alert('Erreur réseau. Veuillez vérifier votre connexion et réessayer.');
+      } else {
+        alert('Erreur lors du paiement. Veuillez réessayer.');
+      }
       setStep('details');
     }
   };

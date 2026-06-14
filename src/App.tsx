@@ -408,8 +408,25 @@ function App() {
       const mapped = await mapSupabaseUser();
       if (mapped) setCurrentUser(mapped);
       setAuthModal(null);
-    } catch {
-      setAuthError('Une erreur est survenue');
+    } catch (err: any) {
+      const errorMessage = err?.message || '';
+      if (mode === 'login') {
+        if (errorMessage.includes('Invalid login credentials')) {
+          setAuthError('Identifiant ou mot de passe incorrect.');
+        } else if (errorMessage.includes('Email not confirmed')) {
+          setAuthError('Veuillez confirmer votre email avant de vous connecter.');
+        } else {
+          setAuthError('Erreur de connexion. Veuillez réessayer.');
+        }
+      } else {
+        if (errorMessage.includes('already registered')) {
+          setAuthError('Cet email est déjà utilisé.');
+        } else if (errorMessage.includes('password')) {
+          setAuthError('Le mot de passe doit contenir au moins 6 caractères.');
+        } else {
+          setAuthError('Erreur lors de l\'inscription. Veuillez réessayer.');
+        }
+      }
     } finally {
       setAuthLoading(false);
     }
@@ -561,15 +578,6 @@ function App() {
   };
 
   const activeFiltersCount = [filterSector, filterContract, filterLocation, filterLevel, filterExperience, filterPublishedWithin].filter(Boolean).length;
-
-  // Prevent auth modal flash during hydration
-  if (isHydrating) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-ink-600">Chargement...</div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen text-[#14130d]">
@@ -1721,7 +1729,7 @@ function App() {
       )}
 
       {/* Auth Modal */}
-      {authModal && (
+      {authModal && !isHydrating && (
         <div className="fixed inset-0 bg-ink-900/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-sticker-lg w-full max-w-md overflow-hidden animate-slide-up">
             <div className="h-1 bg-ci-flag"></div>
