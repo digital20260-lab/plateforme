@@ -1,10 +1,10 @@
 import {
-  getSupabaseAdmin,
   readRawBody,
   requirePost,
   setSecurityHeaders,
   verifyGeniusPaySignature
 } from './_utils.js';
+import { createClient } from '@supabase/supabase-js';
 
 export const config = { api: { bodyParser: false } };
 
@@ -41,9 +41,15 @@ export default async function handler(req: any, res: any) {
     const isSuccess = event === 'payment.success' || status === 'completed' || status === 'success';
     const isFailed = event === 'payment.failed' || event === 'payment.expired' || ['failed', 'expired', 'cancelled', 'canceled'].includes(status);
 
-    const supabase = getSupabaseAdmin();
-    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) console.error('Missing SUPABASE_SERVICE_ROLE_KEY in env');
+    console.log('=== WEBHOOK START ===');
+    console.log('SUPABASE_URL existe:', !!process.env.SUPABASE_URL);
+    console.log('SERVICE_ROLE existe:', !!process.env.SUPABASE_SERVICE_ROLE_KEY);
 
+    console.log('=== CREATION CLIENT SUPABASE ===');
+    const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE_KEY || '');
+    console.log('Client créé :', !!supabase);
+
+    console.log('=== UPSERT PAYMENTS transactionRef:', transactionRef);
     const { data: paymentRow, error: payError } = await supabase
       .from('payments')
       .upsert({
@@ -58,7 +64,7 @@ export default async function handler(req: any, res: any) {
       }, { onConflict: 'geniuspay_transaction_id' })
       .select('id')
       .single();
-
+    console.log('Résultat payments upsert:', JSON.stringify({ paymentRow, payError }));
     if (payError) {
       console.error('Supabase error (payments upsert):', payError);
       throw payError;
@@ -67,10 +73,14 @@ export default async function handler(req: any, res: any) {
     if (isSuccess && kind === 'abonnement') {
       const expiry = new Date();
       expiry.setMonth(expiry.getMonth() + 1);
-      const { error: profileError } = await supabase
+      const expiryStr = expiry.toISOString().slice(0, 10);
+      console.log('=== UPDATE PROFILES userId:', userId);
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .update({ plan: 'premium', plan_expiry: expiry.toISOString().slice(0, 10) })
-        .eq('id', userId);
+        .update({ plan: 'premium', plan_expiry: expiryStr })
+        .eq('id', userId)
+        .select();
+      console.log('Résultat profiles:', JSON.stringify({ data: profileData, error: profileError }));
       if (profileError) {
         console.error('Supabase error (profiles update):', profileError);
         throw profileError;
