@@ -24,6 +24,7 @@ export default async function handler(req: any, res: any) {
     }
 
     const payload = JSON.parse(rawBody || '{}');
+    console.log('GeniusPay webhook payload:', JSON.stringify(payload));
     const event = String(req.headers['x-webhook-event'] || payload.event || '');
     const payment = payload.data || payload.payment || payload;
     const transactionRef = String(payment.reference || payment.transaction_id || payload.reference || '');
@@ -31,7 +32,7 @@ export default async function handler(req: any, res: any) {
     const amount = Number(payment.amount || payload.amount || 0);
     const metadata = payment.metadata || payload.metadata || {};
 
-    const userId = String(metadata.userId || metadata.user_id || '');
+    const userId = String(metadata.user_id || metadata.userId || '');
     const kind = String(metadata.kind || '');
     const reference = String(metadata.reference || metadata.paperId || kind || '');
 
@@ -41,6 +42,7 @@ export default async function handler(req: any, res: any) {
     const isFailed = event === 'payment.failed' || event === 'payment.expired' || ['failed', 'expired', 'cancelled', 'canceled'].includes(status);
 
     const supabase = getSupabaseAdmin();
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) console.error('Missing SUPABASE_SERVICE_ROLE_KEY in env');
 
     const { data: paymentRow, error: payError } = await supabase
       .from('payments')
@@ -57,23 +59,32 @@ export default async function handler(req: any, res: any) {
       .select('id')
       .single();
 
-    if (payError) throw payError;
+    if (payError) {
+      console.error('Supabase error (payments upsert):', payError);
+      throw payError;
+    }
 
     if (isSuccess && kind === 'abonnement') {
       const expiry = new Date();
       expiry.setMonth(expiry.getMonth() + 1);
-      const { error } = await supabase
+      const { error: profileError } = await supabase
         .from('profiles')
         .update({ plan: 'premium', plan_expiry: expiry.toISOString().slice(0, 10) })
         .eq('id', userId);
-      if (error) throw error;
+      if (profileError) {
+        console.error('Supabase error (profiles update):', profileError);
+        throw profileError;
+      }
     }
 
     if (isSuccess && kind === 'sujet') {
-      const { error } = await supabase
+      const { error: purchasedError } = await supabase
         .from('purchased_papers')
         .upsert({ user_id: userId, paper_id: reference, payment_id: paymentRow?.id }, { onConflict: 'user_id,paper_id' });
-      if (error) throw error;
+      if (purchasedError) {
+        console.error('Supabase error (purchased_papers upsert):', purchasedError);
+        throw purchasedError;
+      }
     }
 
     if (isFailed) {
