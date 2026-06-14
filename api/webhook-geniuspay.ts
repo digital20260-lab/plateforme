@@ -15,6 +15,12 @@ async function readRawBody(req: any): Promise<string> {
 }
 
 export default async function handler(req: any, res: any) {
+  console.log('=== WEBHOOK REÇU ===');
+  console.log('method:', req.method);
+  console.log("headers x-webhook-event:", req.headers['x-webhook-event']);
+  console.log("headers x-webhook-signature:", req.headers['x-webhook-signature'] ? 'PRESENT' : 'ABSENT');
+  console.log("headers x-webhook-timestamp:", req.headers['x-webhook-timestamp'] ? 'PRESENT' : 'ABSENT');
+
   console.log('=== STEP 1: webhook reçu');
   console.log('=== STEP 2: headers', JSON.stringify(req.headers || {}));
 
@@ -26,6 +32,12 @@ export default async function handler(req: any, res: any) {
     rawBody = '';
   }
   console.log('=== STEP 3: body brut', rawBody);
+  console.log('=== BODY BRUT ===');
+  try {
+    console.log(typeof rawBody === 'string' ? rawBody : rawBody?.toString());
+  } catch (e) {
+    console.log('=== BODY BRUT toString error', String(e));
+  }
 
   let body: any = {};
   try {
@@ -35,6 +47,24 @@ export default async function handler(req: any, res: any) {
     body = req.body || {};
   }
   console.log('=== STEP 4: body parsé', JSON.stringify(body));
+  console.log('=== BODY PARSÉ ===');
+  try {
+    console.log(JSON.stringify(body, null, 2));
+  } catch (e) {
+    console.log('=== BODY PARSÉ stringify error', String(e));
+  }
+  console.log('=== METADATA ===');
+  try {
+    console.log(JSON.stringify(body?.metadata || body?.data?.metadata));
+  } catch (e) {
+    console.log('=== METADATA stringify error', String(e));
+  }
+  console.log('=== USER_ID ===');
+  try {
+    console.log(body?.metadata?.user_id || body?.data?.metadata?.user_id || 'INTROUVABLE');
+  } catch (e) {
+    console.log('=== USER_ID read error', String(e));
+  }
 
   const event = String(req.headers['x-webhook-event'] || body.event || '');
   console.log('=== STEP 5: event', event);
@@ -74,12 +104,14 @@ export default async function handler(req: any, res: any) {
         const expiry = new Date();
         expiry.setMonth(expiry.getMonth() + 1);
         const expiryStr = expiry.toISOString().slice(0, 10);
+        console.log('=== AVANT UPDATE PROFILES ===');
         const { data, error } = await supabase
           .from('profiles')
           .update({ plan: 'premium', plan_expiry: expiryStr })
           .eq('id', userId)
           .select();
-        console.log('=== STEP 9: résultat update profiles', JSON.stringify({ data, error }));
+        console.log('=== RÉSULTAT ===');
+        console.log(JSON.stringify({ data, error }));
       } else {
         console.log('=== STEP 8.2: pas de userId fourni, skip update profiles');
       }
