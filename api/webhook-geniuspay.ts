@@ -16,9 +16,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const userId = metadata.user_id
     const reference = data?.reference || body?.reference
     const event = req.headers['x-webhook-event']
+    const kind = metadata.kind // 'abonnement' ou 'sujet'
 
     console.log('userId:', userId)
     console.log('reference:', reference)
+    console.log('kind:', kind)
 
     if (event === 'payment.success' && userId) {
       const supabase = createClient(
@@ -26,18 +28,45 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         process.env.SUPABASE_SERVICE_ROLE_KEY!
       )
 
-      const expiry = new Date()
-      expiry.setDate(expiry.getDate() + 30)
-      const expiryStr = expiry.toISOString().split('T')[0]
+      // Pour abonnement : mettre à jour le plan
+      if (kind === 'abonnement') {
+        const expiry = new Date()
+        expiry.setDate(expiry.getDate() + 30)
+        const expiryStr = expiry.toISOString().split('T')[0]
 
-      const { data, error } = await supabase
-        .from('profiles')
-        .update({ plan: 'premium', plan_expiry: expiryStr })
-        .eq('id', userId)
-        .select()
+        const { data, error } = await supabase
+          .from('profiles')
+          .update({ plan: 'premium', plan_expiry: expiryStr })
+          .eq('id', userId)
+          .select()
 
-      console.log('update profiles:', JSON.stringify({ data, error }))
+        console.log('update profiles:', JSON.stringify({ data, error }))
+      }
 
+      // Pour document : créer l'entrée purchased_papers
+      if (kind === 'sujet' && reference) {
+        const { data: paymentData, error: paymentError } = await supabase
+          .from('payments')
+          .select('id')
+          .eq('geniuspay_transaction_id', reference)
+          .maybeSingle()
+
+        console.log('payment lookup:', JSON.stringify({ paymentData, paymentError }))
+
+        if (paymentData?.id) {
+          const { data: purchaseData, error: purchaseError } = await supabase
+            .from('purchased_papers')
+            .insert({
+              user_id: userId,
+              paper_id: reference,
+              payment_id: paymentData.id
+            })
+
+          console.log('create purchased_papers:', JSON.stringify({ purchaseData, purchaseError }))
+        }
+      }
+
+      // Mettre à jour le statut du paiement
       await supabase
         .from('payments')
         .update({ status: 'accepted', validated_at: new Date().toISOString() })

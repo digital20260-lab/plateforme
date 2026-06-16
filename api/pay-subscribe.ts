@@ -28,8 +28,8 @@ export default async function handler(req: any, res: any) {
       userEmail,
       userName,
       metadata: { user_id: userId, kind: 'abonnement', reference: 'premium' },
-      successUrl: `${process.env.VITE_APP_URL || 'https://plateforme-pi.vercel.app'}/paiement/succes?kind=abonnement`,
-      errorUrl: `${process.env.VITE_APP_URL || 'https://plateforme-pi.vercel.app'}/paiement/echec?kind=abonnement`
+      successUrl: `${process.env.VITE_APP_URL || 'https://plateforme-tau.vercel.app'}/paiement/succes?kind=abonnement`,
+      errorUrl: `${process.env.VITE_APP_URL || 'https://plateforme-tau.vercel.app'}/paiement/echec?kind=abonnement`
     });
 
     const transactionRef = String(checkout.reference || checkout.id || '');

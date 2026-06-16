@@ -1,5 +1,5 @@
 param(
-  [string]$Url = "https://plateforme-pi.vercel.app/api/webhook-geniuspay",
+  [string]$Url = "https://plateforme-tau.vercel.app/api/webhook-geniuspay",
   [string]$Secret = "",
   [string]$UserId = "010307d9-46d8-435f-862e-e6cb6cbd6038",
   [int]$Amount = 1500
