@@ -27,7 +27,7 @@ export const CONFIG = {
   // ---------------------------------------------------------
   resend: {
     apiKey: process.env.RESEND_API_KEY || '',
-    from: process.env.RESEND_FROM || 'Emploi Concours CI <alertes@emploi-concours.ci>'
+    from: process.env.RESEND_FROM || 'Emploi Concours CI <onboarding@resend.dev>'
   },
 
   // Planning d'envoi du digest email : lundi et jeudi à 8h.
