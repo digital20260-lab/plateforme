@@ -6,7 +6,7 @@ import type { User } from './AccountPage';
 import { usePayment } from './hooks/usePayment';
 
 type PaidPlan = 'premium';
-type Step = 'details' | 'processing' | 'success';
+type Step = 'details' | 'processing';
 
 interface Props {
   plan: PaidPlan;
@@ -46,7 +46,9 @@ export function SubscribePage({ plan, user, onBack }: Props) {
     
     try {
       await subscribeToPremium(user);
-      setStep('success');
+      // L'utilisateur est redirigé vers GeniusPay pour payer.
+      // Après paiement réussi, il sera redirigé vers /paiement/succes
+      // qui affichera le message de succès.
     } catch (err: any) {
       const errorMsg = err?.message || '';
       if (errorMsg.includes('already')) {
@@ -190,25 +192,6 @@ export function SubscribePage({ plan, user, onBack }: Props) {
                   <p className="text-sm text-ink-500 max-w-xs">
                     Consultez votre téléphone et saisissez votre code secret pour valider le paiement.
                   </p>
-                </div>
-              )}
-
-              {step === 'success' && (
-                <div className="p-6 py-10 flex flex-col items-center justify-center text-center">
-                  <div className="w-16 h-16 bg-forest-100 rounded-full flex items-center justify-center mb-4 text-forest-600">
-                    <CheckCircle size={32} />
-                  </div>
-                  <h3 className="font-display font-bold text-2xl text-ink-900 mb-1">Bienvenue dans {info.label} ! 🎉</h3>
-                  <p className="text-sm text-ink-500 mb-6">
-                    Votre abonnement est actif pour 1 mois.<br />
-                    Toutes les fonctionnalités sont débloquées.
-                  </p>
-                  <button
-                    onClick={onBack}
-                    className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl"
-                  >
-                    Commencer à explorer
-                  </button>
                 </div>
               )}
             </div>

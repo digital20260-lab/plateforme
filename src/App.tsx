@@ -931,6 +931,7 @@ function App() {
       ) : route.page === 'payment-success' ? (
         <PaymentSuccessPage
           onGoAccount={() => navigate({ page: 'account' })}
+          onGoHome={() => navigate({ page: 'home' })}
           onRefreshProfile={async () => {
             const mapped = await mapSupabaseUser().catch(() => null);
             if (mapped) setCurrentUser(mapped);
@@ -942,6 +943,7 @@ function App() {
         <PaymentErrorPage
           onRetry={() => successPaper ? navigate({ page: 'paper', id: successPaper.id }) : navigate({ page: 'subscribe', plan: 'premium' })}
           onBack={() => navigate({ page: 'home' })}
+          onGoHome={() => navigate({ page: 'home' })}
         />
       ) : route.page === 'account' ? (
         <AccountPage

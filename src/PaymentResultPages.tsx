@@ -3,15 +3,30 @@ import { ArrowLeft, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 
 interface SuccessProps {
   onGoAccount: () => void;
+  onGoHome: () => void;
   onRefreshProfile: () => Promise<void>;
   documentTitle?: string;
   onDownloadDocument?: () => Promise<void>;
 }
 
-export function PaymentSuccessPage({ onGoAccount, onRefreshProfile, documentTitle, onDownloadDocument }: SuccessProps) {
+export function PaymentSuccessPage({ onGoAccount, onGoHome, onRefreshProfile, documentTitle, onDownloadDocument }: SuccessProps) {
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
-  const isDocumentPayment = !!documentTitle && !!onDownloadDocument;
+  
+  // Récupérer les paramètres depuis l'URL
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+  const kind = searchParams.get('kind');
+  const paperId = searchParams.get('paperId');
+  
+  const isDocumentPayment = kind === 'sujet' && !!documentTitle && !!onDownloadDocument;
+  const isSubscriptionPayment = kind === 'abonnement';
+
+  // Si pas de paramètre 'kind', c'est que l'utilisateur n'a pas payé - rediriger vers l'accueil
+  useEffect(() => {
+    if (!kind) {
+      onGoHome();
+    }
+  }, [kind, onGoHome]);
 
   useEffect(() => {
     const t = window.setTimeout(async () => {
@@ -34,6 +49,25 @@ export function PaymentSuccessPage({ onGoAccount, onRefreshProfile, documentTitl
     return () => window.clearTimeout(t);
   }, [onRefreshProfile, isDocumentPayment, onDownloadDocument]);
 
+  // Redirection automatique après 5 secondes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isDocumentPayment) {
+        // Pour les documents, rester sur la page ou rediriger vers les documents
+        onGoAccount();
+      } else if (isSubscriptionPayment) {
+        // Pour l'abonnement, rediriger vers le compte
+        onGoAccount();
+      }
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [isDocumentPayment, isSubscriptionPayment, onGoAccount]);
+
+  // Si pas de kind, ne pas afficher le contenu
+  if (!kind) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4">
       <div className="max-w-md text-center">
@@ -44,6 +78,8 @@ export function PaymentSuccessPage({ onGoAccount, onRefreshProfile, documentTitl
         <p className="text-ink-600 mb-6">
           {isDocumentPayment
             ? <>Votre paiement a été reçu pour <span className="font-bold text-ink-900">{documentTitle}</span>. Vous pouvez télécharger votre document.</>
+            : isSubscriptionPayment
+            ? <>Bienvenue dans Premium ! 🎉<br /><span className="text-sm">Votre abonnement est activé pour 1 mois. Toutes les fonctionnalités sont maintenant débloquées.</span></>
             : <>Votre paiement a été reçu. Nous actualisons votre profil pour vérifier l'activation de vos avantages.</>}
         </p>
 
@@ -81,9 +117,26 @@ export function PaymentSuccessPage({ onGoAccount, onRefreshProfile, documentTitl
 interface ErrorProps {
   onRetry: () => void;
   onBack: () => void;
+  onGoHome: () => void;
 }
 
-export function PaymentErrorPage({ onRetry, onBack }: ErrorProps) {
+export function PaymentErrorPage({ onRetry, onBack, onGoHome }: ErrorProps) {
+  // Récupérer les paramètres depuis l'URL
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+  const kind = searchParams.get('kind');
+  
+  // Si pas de paramètre 'kind', rediriger vers l'accueil
+  useEffect(() => {
+    if (!kind) {
+      onGoHome();
+    }
+  }, [kind, onGoHome]);
+
+  // Si pas de kind, ne pas afficher le contenu
+  if (!kind) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4">
       <div className="max-w-md text-center">
