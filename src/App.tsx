@@ -329,15 +329,41 @@ function App() {
       return;
     }
 
-    // Check initial session
+    // Vérifier immédiatement si une session existe en cache (sans réseau)
+    const { data: { session: cachedSession } } = supabase.auth.getSession();
+    
+    if (cachedSession?.user) {
+      // On a une session! Créer un user minimal tout de suite pour afficher le bouton
+      // Les infos seront complétées quand le profil charge
+      const minimalUser: User = {
+        id: cachedSession.user.id,
+        email: cachedSession.user.email || '',
+        name: cachedSession.user.user_metadata?.name || cachedSession.user.email?.split('@')[0] || 'Utilisateur',
+        phone: '',
+        plan: 'gratuit',
+        alertType: 'les_deux',
+        alertChannels: { email: true },
+        preferredSectors: [],
+        preferredLevel: ''
+      };
+      setCurrentUser(minimalUser);
+      // Ne pas mettre isHydrating à false encore - on attend le profil
+    }
+
+    // Charger le profil complet en background
     mapSupabaseUser()
       .then(user => {
         setCurrentUser(user);
         setIsHydrating(false);
       })
       .catch(() => {
-        setCurrentUser(null);
-        setIsHydrating(false);
+        // Si erreur, mais on a une session, garder le user minimal
+        if (cachedSession?.user) {
+          setIsHydrating(false);
+        } else {
+          setCurrentUser(null);
+          setIsHydrating(false);
+        }
       });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
@@ -623,8 +649,8 @@ function App() {
             </nav>
 
             <div className="flex items-center gap-2">
-              {isHydrating ? (
-                // Afficher un skeleton/placeholder pendant le chargement pour éviter le flicker
+              {isHydrating && !currentUser ? (
+                // Afficher un skeleton/placeholder SEULEMENT si on charge et qu'on n'a pas de user
                 <div className="flex items-center gap-2 px-3 py-1.5 border rounded-full bg-ink-50 border-ink-100 h-9 w-24 animate-pulse"></div>
               ) : currentUser ? (
                 <div className="relative" ref={userMenuRef}>
