@@ -12,7 +12,7 @@ import { extractSector } from '../lib/classifier.js';
 import { normalizeTitle } from '../lib/db.js';
 
 /** Mots-clés qui rendent un lien/titre pertinent pour la collecte. */
-const RELEVANT = /concours|inscription|admissibilit|convocation|r[ée]sultat|recrutement|visite m[ée]dicale|communiqu[ée]|calendrier|composition|dossier/i;
+const RELEVANT = /concours|inscription|admissibilit|convocation|r[ée]sultat|recrutement|visite m[ée]dicale|communiqu[ée]|calendrier|composition|dossier a fournir/i;
 
 /** Bruit à exclure (menus, mentions légales, etc.) */
 const NOISE = /se connecter|mot de passe|accueil$|^contact$|^faq$|^aide$|cgu|confidentialit|cookie|copyright|english/i;
@@ -60,7 +60,7 @@ export async function scrapeConcoursSource(source) {
     addCandidate(found, source, title, link);
   });
 
-  // Stratégie 2 : liens textuels pertinents (actualités, communiqués)
+  // Stratégie 2 : liens textuels pertinents (actualités, jobs, communiqués)
   $('a').each((_, el) => {
     const title = $(el).text().replace(/\s+/g, ' ').trim();
     if (title.length < 25 || title.length > 220) return;
@@ -70,7 +70,7 @@ export async function scrapeConcoursSource(source) {
   });
 
   // Stratégie 3 : blocs d'annonce courants sur *.ciconcours.com
-  $('.actualite, .annonce, .communique, .news-item, .card, article').each((_, el) => {
+  $('.actualite, .annonce, .communique, .jobs-item, .card, article').each((_, el) => {
     const title = $(el).find('h1,h2,h3,h4,h5,.title,.titre').first().text().replace(/\s+/g, ' ').trim();
     if (title.length < 15 || title.length > 220) return;
     if (NOISE.test(title)) return;

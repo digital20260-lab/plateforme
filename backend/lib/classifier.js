@@ -6,13 +6,14 @@
 const CONCOURS_KEYWORDS = [
   // Fort signal
   { re: /\bconcours\b/i, w: 5 },
+  { re: /\bdossiers a fournir\b/i, w: 5 },
   { re: /admissibilit[ée]/i, w: 4 },
   { re: /\b(épreuves?|composition)\b/i, w: 3 },
   { re: /convocation/i, w: 2 },
   { re: /pr[ée]inscription/i, w: 3 },
   { re: /visite m[ée]dicale/i, w: 2 },
   // Institutions de concours
-  { re: /\b(infas|cafop|ens\b|infj|ena\b|injs|insfs|ipnetp|gucaci)\b/i, w: 5 },
+  { re: /\b(infas|cafop|ens\b|infj|ena\b|injs|insfs|ipnetp|gucaci|empt|ensoa)\b/i, w: 5 },
   { re: /fonction publique/i, w: 3 },
   { re: /gendarmerie|police nationale|militaire/i, w: 3 },
   { re: /instituteurs?|magistrature/i, w: 3 }

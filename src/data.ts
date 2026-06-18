@@ -846,9 +846,10 @@ export const monitoredSources: MonitoredSource[] = [
   { name: 'Agence Emploi Jeunes', category: 'emploi', refreshFrequency: 'Toutes les 6 heures' },
   { name: 'RMO Job Center Côte d Ivoire', category: 'emploi', refreshFrequency: 'Toutes les 6 heures' },
   { name: 'LinkedIn Jobs Côte d Ivoire', category: 'emploi', refreshFrequency: 'Toutes les 6 heures' },
+  { name: 'Go Africa Online', category: 'emploi', refreshFrequency: 'Toutes les 6 heures' },
   { name: 'Pages carrières des entreprises en Côte d Ivoire', category: 'emploi', refreshFrequency: 'Toutes les 6 heures' },
   { name: 'Fonction Publique / GUCACI', category: 'concours', refreshFrequency: 'Toutes les 6 heures' },
-  { name: 'INFAS, INFJ, ENS, INSFS, CAFOP, Police, Défense, INJS', category: 'concours', refreshFrequency: 'Toutes les 6 heures' },
+  { name: 'INFAS, INFJ, ENS, INSFS, CAFOP, AFA, EMPT, Police, Défense, INJS', category: 'concours', refreshFrequency: 'Toutes les 6 heures' },
   { name: 'SIVOP et Journal Officiel', category: 'mixte', refreshFrequency: 'Toutes les 6 heures' }
 ];
 

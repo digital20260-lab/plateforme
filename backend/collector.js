@@ -7,7 +7,7 @@
 // Pipeline :
 //   1. Scrape les sites officiels de concours
 //   2. Scrape les offres d'emploi public
-//   3. Scrape Google News (3 requêtes mots-clés)
+//   3. Scrape Google Jobs (3 requêtes mots-clés)
 //   4. Déduplique (hash titre+URL) → ne garde que le nouveau
 //   5. Tague chaque entrée : 'emploi' ou 'concours'
 //   6. Journalise l'exécution complète
@@ -18,7 +18,7 @@
 import { CONCOURS_SOURCES, EMPLOI_SOURCES } from './config.js';
 import { scrapeConcoursSource } from './scrapers/concours.js';
 import { scrapeEmploiSource } from './scrapers/emplois.js';
-import { scrapeGoogleNews } from './scrapers/googleNews.js';
+import { scrapeGoogleJobs } from './scrapers/googleJobs.js';
 import { insertNewListings, appendLog } from './lib/db.js';
 
 export async function runCollection() {
@@ -74,20 +74,20 @@ export async function runCollection() {
   }
 
   // ----------------------------------------------------------
-  // 3. Google News
+  // 3. Google Jobs
   // ----------------------------------------------------------
-  console.log(`\n📰 [3/3] Google News…`);
-  const news = await scrapeGoogleNews();
-  allCandidates.push(...news.items);
-  for (const [query, count] of Object.entries(news.perQuery)) {
-    console.log(`  ✓ « ${query} » → ${count} article(s)`);
+  console.log(`\n📰 [3/3] Google Jobs…`);
+  const jobs = await scrapeGoogleJobs();
+  allCandidates.push(...jobs.items);
+  for (const [query, count] of Object.entries(jobs.perQuery)) {
+    console.log(`  ✓ « ${query} » → ${count} offre(s)`);
   }
-  log.sources['google-news'] = {
-    name: 'Google News',
-    found: news.items.length,
-    perQuery: news.perQuery
+  log.sources['google-jobs'] = {
+    name: 'Google Jobs',
+    found: jobs.items.length,
+    perQuery: jobs.perQuery
   };
-  log.errors.push(...news.errors);
+  log.errors.push(...jobs.errors);
 
   // ----------------------------------------------------------
   // 4 + 5. Déduplication et insertion (le tag est déjà posé

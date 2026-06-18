@@ -1,11 +1,11 @@
 // ============================================================
-// Scraper Google News (flux RSS officiels)
+// Scraper Google Jobs (flux RSS officiels)
 // Mots-clés : « concours Côte d'Ivoire 2026 »,
-//             « offre emploi public Côte d'Ivoire »,
+//             « offre emploi Côte d'Ivoire »,
 //             « recrutement Côte d'Ivoire »
 // ============================================================
 import Parser from 'rss-parser';
-import { GOOGLE_NEWS_QUERIES, googleNewsRssUrl, CONFIG } from '../config.js';
+import { GOOGLE_JOBS_QUERIES, googleJobsRssUrl, CONFIG } from '../config.js';
 import { classify, extractSector } from '../lib/classifier.js';
 
 const parser = new Parser({
@@ -17,18 +17,18 @@ const parser = new Parser({
 const MAX_AGE_DAYS = 7;
 
 /**
- * Scrape l'ensemble des requêtes Google News configurées.
+ * Scrape l'ensemble des requêtes Google Jobs configurées.
  * @returns {Promise<{items: object[], perQuery: Record<string, number>, errors: string[]}>}
  */
-export async function scrapeGoogleNews() {
+export async function scrapeGoogleJobs() {
   const items = [];
   const perQuery = {};
   const errors = [];
   const seenTitles = new Set();
 
-  for (const query of GOOGLE_NEWS_QUERIES) {
+  for (const query of GOOGLE_JOBS_QUERIES) {
     try {
-      const feed = await parser.parseURL(googleNewsRssUrl(query));
+      const feed = await parser.parseURL(googleJobsRssUrl(query));
       let count = 0;
 
       for (const entry of feed.items || []) {
@@ -50,9 +50,9 @@ export async function scrapeGoogleNews() {
           type: classify(fullText),          // tag automatique emploi / concours
           sector: extractSector(fullText),
           ministry: '',
-          sourceId: 'google-news',
-          sourceName: `Google News (« ${query} »)`,
-          sourceUrl: entry.link || 'https://news.google.com',
+          sourceId: 'google-jobs',
+          sourceName: `Google Jobs (« ${query} »)`,
+          sourceUrl: entry.link || 'https://jobs.google.com',
           link: entry.link || '',
           excerpt,
           publishedAt: entry.pubDate ? new Date(entry.pubDate).toISOString() : ''
@@ -63,7 +63,7 @@ export async function scrapeGoogleNews() {
       perQuery[query] = count;
     } catch (err) {
       perQuery[query] = 0;
-      errors.push(`Google News « ${query} » : ${err.message}`);
+      errors.push(`Google Jobs « ${query} » : ${err.message}`);
     }
   }
 

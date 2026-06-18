@@ -19,7 +19,7 @@ export const CONFIG = {
   retries: 3,
 
   // User-Agent honnête
-  userAgent: 'EmploiConcoursCI-Collector/1.0 (+https://emploi-concours.ci/bot)',
+  userAgent: 'EmploiConcoursCI-Collector/1.0 (+https://plateforme-tau.vercel.app/bot)',
 
   // ---------------------------------------------------------
   // RESEND pour les emails candidats (lundi et jeudi)
@@ -48,10 +48,11 @@ export const CONCOURS_SOURCES = [
   { id: 'ens',      name: 'ENS Abidjan',                          url: 'https://ens.mesrs-ci.net',              ministry: 'Enseignement Supérieur' },
   { id: 'infj',     name: 'INFJ — Formation Judiciaire',          url: 'https://infj.ciconcours.com',           ministry: 'Justice' },
   { id: 'police',   name: 'Police Nationale (ENP)',               url: 'https://police.ciconcours.com',         ministry: 'Intérieur et Sécurité' },
-  { id: 'defense',  name: 'Défense / Gendarmerie / AFA',          url: 'https://defense.ciconcours.net',        ministry: 'Défense' },
+  { id: 'defense',  name: 'ENSOA / EMPT/ Gendarmerie / AFA',      url: 'https://defense.ciconcours.net',        ministry: 'Défense' },
   { id: 'injs',     name: 'INJS — Jeunesse et Sport',             url: 'https://concours.injsabidjan.com',      ministry: 'Jeunesse et Sports' },
   { id: 'insfs',    name: 'INSFS — Formation Sociale',            url: 'https://insfs.ciconcours.com',          ministry: 'Affaires Sociales' },
   { id: 'ipnetp',   name: 'IPNETP — Enseignement Technique',      url: 'https://ipnetp.ciconcours.com',         ministry: 'Enseignement Technique' },
+  { id: 'minef',    name: 'MINEF — Eaux et forêt',                url: 'https://minef.ciconcours.com',         ministry: 'Eaux et forêt' },
   { id: 'memfpma',  name: 'MEMFPMA / ENA — Fonction Publique',    url: 'https://gucaci.ciconcours.com',         ministry: 'Fonction Publique' }
 ];
 
@@ -60,17 +61,19 @@ export const CONCOURS_SOURCES = [
 // ------------------------------------------------------------
 export const EMPLOI_SOURCES = [
   { id: 'aej',   name: 'Agence Emploi Jeunes', url: 'https://www.agenceemploijeunes.ci/site/offres-emplois' },
+  { id: 'gao',   name: 'Go Africa Online', url: 'https://www.goafricaonline.com/ci/emploi' },
+  { id: 'lkd',   name: 'linkedin', url: 'https://www.linkedin.com/jobs' },
   { id: 'fp',    name: 'Fonction Publique CI', url: 'https://www.fonctionpublique.gouv.ci' }
 ];
 
 // ------------------------------------------------------------
-// GOOGLE NEWS — flux RSS par mots-clés
+// GOOGLE JOBS — flux RSS par mots-clés
 // ------------------------------------------------------------
-export const GOOGLE_NEWS_QUERIES = [
+export const GOOGLE_JOBS_QUERIES = [
   'concours Côte d\u2019Ivoire 2026',
   'offre emploi public Côte d\u2019Ivoire',
   'recrutement Côte d\u2019Ivoire'
 ];
 
-export const googleNewsRssUrl = (query) =>
-  `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=fr&gl=CI&ceid=CI:fr`;
+export const googleJobsRssUrl = (query) =>
+  `https://jobs.google.com/rss/search?q=${encodeURIComponent(query)}&hl=fr&gl=CI&ceid=CI:fr`;
