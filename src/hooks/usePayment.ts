@@ -55,26 +55,47 @@ export function usePayment() {
   };
 
   const downloadDocument = async (paper: PastPaper) => {
-    const token = await getJwt();
-    const response = await fetch('/api/download-paper', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ paperId: paper.id })
-    });
+    try {
+      // Si un documentUrl est défini, télécharger directement le PDF
+      if (paper.documentUrl) {
+        const response = await fetch(paper.documentUrl);
+        if (!response.ok) throw new Error('Fichier non trouvé');
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${paper.title.replace(/[^a-zA-Z0-9À-ÿ]+/g, '-').replace(/^-|-$/g, '')}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        return;
+      }
 
-    if (!response.ok) throw new Error('Une erreur est survenue');
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${paper.title.replace(/[^a-zA-Z0-9À-ÿ]+/g, '-').replace(/^-|-$/g, '')}.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+      // Sinon, utiliser l'API pour générer le PDF
+      const token = await getJwt();
+      const response = await fetch('/api/download-paper', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ paperId: paper.id })
+      });
+
+      if (!response.ok) throw new Error('Une erreur est survenue');
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${paper.title.replace(/[^a-zA-Z0-9À-ÿ]+/g, '-').replace(/^-|-$/g, '')}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      throw new Error('Impossible de télécharger le document. Vérifiez que le fichier est disponible.');
+    }
   };
 
   return { subscribeToPremium, buyDocument, downloadDocument };

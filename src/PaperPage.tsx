@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  ArrowLeft, FileText, ShieldCheck, CreditCard
+  ArrowLeft, FileText, CheckCircle, ShieldCheck, CreditCard
 } from 'lucide-react';
 import type { PastPaper } from './data';
 import type { User } from './AccountPage';

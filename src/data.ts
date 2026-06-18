@@ -859,6 +859,7 @@ export interface PastPaper {
   year: number;
   title: string;
   price: number;
+  documentUrl?: string;
 }
 
 export const mockPastPapers: PastPaper[] = [
@@ -867,27 +868,31 @@ export const mockPastPapers: PastPaper[] = [
     concours: 'INFAS',
     year: 2025,
     title: 'Sujets INFAS - Concours Direct Infirmiers et Sages-Femmes',
-    price: 1000
+    price: 1000,
+    documentUrl: '/documents/infas-2025.pdf'
   },
   {
     id: 'p2',
     concours: 'Fonction Publique',
     year: 2025,
     title: 'Sujets de Culture Générale - Concours Administratifs',
-    price: 1000
+    price: 1000,
+    documentUrl: '/documents/ordre-general-2024.pdf'
   },
   {
     id: 'p3',
     concours: 'CAFOP',
     year: 2024,
     title: 'Sujets CAFOP - Mathématiques et Français',
-    price: 1000
+    price: 1000,
+    documentUrl: '/documents/cafop-2024.pdf'
   },
   {
     id: 'p4',
     concours: 'ENS Abidjan',
     year: 2023,
     title: 'Sujets ENS - CAP-PC et CAP-PL toutes filières',
-    price: 1000
+    price: 1000,
+    documentUrl: '/documents/ens-2023.pdf'
   }
 ];
