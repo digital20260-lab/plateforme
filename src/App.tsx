@@ -329,55 +329,69 @@ function App() {
       return;
     }
 
-    // Vérifier immédiatement si une session existe en cache (sans réseau)
-    const { data: { session: cachedSession } } = supabase.auth.getSession();
-    
-    if (cachedSession?.user) {
-      // On a une session! Créer un user minimal tout de suite pour afficher le bouton
-      // Les infos seront complétées quand le profil charge
-      const minimalUser: User = {
-        id: cachedSession.user.id,
-        email: cachedSession.user.email || '',
-        name: cachedSession.user.user_metadata?.name || cachedSession.user.email?.split('@')[0] || 'Utilisateur',
-        phone: '',
-        plan: 'gratuit',
-        alertType: 'les_deux',
-        alertChannels: { email: true },
-        preferredSectors: [],
-        preferredLevel: ''
-      };
-      setCurrentUser(minimalUser);
-      // Ne pas mettre isHydrating à false encore - on attend le profil
-    }
+    let isMounted = true;
 
-    // Charger le profil complet en background
-    mapSupabaseUser()
-      .then(user => {
-        setCurrentUser(user);
-        setIsHydrating(false);
-      })
-      .catch(() => {
-        // Si erreur, mais on a une session, garder le user minimal
-        if (cachedSession?.user) {
+    const initializeAuth = async () => {
+      try {
+        // Vérifier immédiatement si une session existe
+        const { data: { session: cachedSession } } = await supabase.auth.getSession();
+        
+        if (isMounted && cachedSession?.user) {
+          // On a une session! Créer un user minimal tout de suite pour afficher le bouton
+          const minimalUser: User = {
+            id: cachedSession.user.id,
+            email: cachedSession.user.email || '',
+            name: cachedSession.user.user_metadata?.name || cachedSession.user.email?.split('@')[0] || 'Utilisateur',
+            phone: '',
+            plan: 'gratuit',
+            alertType: 'les_deux',
+            alertChannels: { email: true },
+            preferredSectors: [],
+            preferredLevel: ''
+          };
+          setCurrentUser(minimalUser);
+          // Ne pas mettre isHydrating à false encore - on attend le profil
+        }
+
+        // Charger le profil complet en background
+        const fullUser = await mapSupabaseUser().catch(() => null);
+        if (isMounted) {
+          if (fullUser) {
+            setCurrentUser(fullUser);
+          } else if (!cachedSession?.user) {
+            setCurrentUser(null);
+          }
           setIsHydrating(false);
-        } else {
+        }
+      } catch (err) {
+        if (isMounted) {
           setCurrentUser(null);
           setIsHydrating(false);
         }
-      });
+      }
+    };
+
+    initializeAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (!session?.user) {
-        setCurrentUser(null);
-        setIsHydrating(false);
+        if (isMounted) {
+          setCurrentUser(null);
+          setIsHydrating(false);
+        }
         return;
       }
       const mapped = await mapSupabaseUser().catch(() => null);
-      setCurrentUser(mapped);
-      setIsHydrating(false);
+      if (isMounted) {
+        setCurrentUser(mapped);
+        setIsHydrating(false);
+      }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   // Déconnexion automatique après 10 minutes d'inactivité (seulement si connecté)
