@@ -32,7 +32,7 @@ export function PaymentSuccessPage({ onGoAccount, onGoHome, onRefreshProfile, do
     const t = window.setTimeout(async () => {
       await onRefreshProfile().catch(() => {});
       setLoading(false);
-      // Auto-download document 1.5s after profile refresh if it's a document payment
+      // Auto-download document 0.5s after profile refresh if it's a document payment
       if (isDocumentPayment && onDownloadDocument) {
         const downloadTimer = window.setTimeout(async () => {
           setDownloading(true);
@@ -42,18 +42,18 @@ export function PaymentSuccessPage({ onGoAccount, onGoHome, onRefreshProfile, do
             console.error('Auto-download failed:', err);
           }
           setDownloading(false);
-        }, 1500);
+        }, 500);
         return () => window.clearTimeout(downloadTimer);
       }
-    }, 2500);
+    }, 800);
     return () => window.clearTimeout(t);
   }, [onRefreshProfile, isDocumentPayment, onDownloadDocument]);
 
-  // Redirection automatique après 3 secondes
+  // Redirection automatique après 2 secondes
   useEffect(() => {
     const timer = setTimeout(() => {
       onGoAccount();
-    }, 3000);
+    }, 2000);
     return () => clearTimeout(timer);
   }, [onGoAccount]);
 

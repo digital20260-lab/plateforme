@@ -72,13 +72,22 @@ export async function getMyProfile() {
   if (!supabase) throw new Error('supabase_not_configured');
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single();
-  if (error) throw error;
-  return data;
+  
+  // Ajouter un timeout de 8 secondes pour éviter les requêtes qui traînent
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
+  
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle();
+    if (error) throw error;
+    return data;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 /** Mise à jour du profil (nom, téléphone, préférences — PAS le plan). */

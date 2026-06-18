@@ -354,9 +354,9 @@ function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Déconnexion automatique après 5 minutes d'inactivité (seulement si connecté)
+  // Déconnexion automatique après 10 minutes d'inactivité (seulement si connecté)
   useInactivityLogout({
-    timeoutMinutes: 5,
+    timeoutMinutes: 10,
     onLogout: async () => {
       if (isAuthenticated) {
         await handleLogout();
@@ -704,6 +704,10 @@ function App() {
                     </div>
                   )}
                 </div>
+              ) : isHydrating ? (
+                // Pendant le chargement, afficher un espace vide au lieu de "Connexion/Inscription"
+                // Cela évite le flicker lors du refresh
+                null
               ) : (
                 <>
                   <button
@@ -866,6 +870,10 @@ function App() {
                 >
                   🚪 Déconnexion
                 </button>
+              ) : isHydrating ? (
+                // Pendant le chargement, afficher un espace vide au lieu de "Connexion"
+                // Cela évite le flicker lors du refresh
+                null
               ) : (
                 <div className="space-y-2">
                   <button
