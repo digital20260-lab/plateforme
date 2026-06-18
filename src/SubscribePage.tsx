@@ -40,6 +40,13 @@ export function SubscribePage({ plan, user, onBack }: Props) {
 
   const info = PLANS[plan];
   const alreadyOnPlan = user.plan === plan;
+  
+  // Vérifier si le plan est expiré
+  const now = new Date();
+  const isExpired = user.planExpiry ? new Date(user.planExpiry) < now : false;
+  
+  // Afficher le bouton renouvellement seulement si l'utilisateur a déjà ce plan ET il est expiré
+  const canRenew = alreadyOnPlan && isExpired;
 
   const handlePay = async () => {
     setStep('processing');
@@ -142,13 +149,13 @@ export function SubscribePage({ plan, user, onBack }: Props) {
             <div className="bg-white border border-ink-100 rounded-2xl overflow-hidden shadow-sticker">
               <div className="h-1 bg-ci-flag"></div>
 
-              {alreadyOnPlan && step === 'details' ? (
+              {canRenew && step === 'details' ? (
                 <div className="p-6 text-center py-10">
                   <div className="w-14 h-14 bg-forest-100 text-forest-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <CheckCircle size={26} />
                   </div>
-                  <h3 className="font-display font-bold text-xl text-ink-900 mb-1">Vous êtes déjà abonné(e)</h3>
-                  <p className="text-sm text-ink-500 mb-5">Votre plan actuel est déjà {info.label}.</p>
+                  <h3 className="font-display font-bold text-xl text-ink-900 mb-1">Votre plan a expiré</h3>
+                  <p className="text-sm text-ink-500 mb-5">Renouveler votre abonnement pour continuer à profiter des avantages Premium.</p>
                   <button
                     onClick={handlePay}
                     className="w-full bg-forest-700 hover:bg-forest-800 text-white font-bold py-3 rounded-xl mb-2"
@@ -156,6 +163,17 @@ export function SubscribePage({ plan, user, onBack }: Props) {
                     Renouveler 1 mois — {info.price.toLocaleString('fr-FR')} FCFA
                   </button>
                   <button onClick={onBack} className="text-sm font-semibold text-ink-500 hover:text-ink-900">
+                    Retour
+                  </button>
+                </div>
+              ) : alreadyOnPlan && step === 'details' ? (
+                <div className="p-6 text-center py-10">
+                  <div className="w-14 h-14 bg-forest-100 text-forest-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle size={26} />
+                  </div>
+                  <h3 className="font-display font-bold text-xl text-ink-900 mb-1">Vous êtes déjà abonné(e)</h3>
+                  <p className="text-sm text-ink-500 mb-5">Votre plan actuel est déjà {info.label}.</p>
+                  <button onClick={onBack} className="w-full text-sm font-semibold text-ink-900 hover:text-forest-700 py-3 rounded-xl border border-ink-200 hover:border-forest-700">
                     Retour
                   </button>
                 </div>
@@ -170,7 +188,8 @@ export function SubscribePage({ plan, user, onBack }: Props) {
                   </div>
 
                   <div className="mb-5 rounded-xl bg-orange-50 border border-orange-200 p-4 text-sm text-orange-900">
-                    Vous allez être redirigé vers la page de paiement GeniusPay pour choisir votre moyen de paiement (Orange Money, MTN, Wave ou carte).
+                    <div>Vous allez être redirigé vers la page de paiement GeniusPay.</div>
+                    <div className="text-xs opacity-90 mt-1">Choisissez: Orange Money, MTN, Wave ou carte.</div>
                   </div>
 
                   <button
@@ -186,12 +205,13 @@ export function SubscribePage({ plan, user, onBack }: Props) {
               ) : null}
 
               {step === 'processing' && (
-                <div className="p-6 py-14 flex flex-col items-center justify-center text-center">
-                  <div className="w-14 h-14 border-4 border-ink-100 border-t-forest-600 rounded-full animate-spin mb-5"></div>
-                  <h3 className="font-display font-bold text-xl text-ink-900 mb-1">Validation en cours</h3>
+                <div className="p-6 py-10 flex flex-col items-center justify-center text-center">
+                  <div className="w-12 h-12 border-3 border-orange-100 border-t-orange-500 rounded-full animate-spin mb-4"></div>
+                  <h3 className="font-display font-bold text-lg text-ink-900 mb-1.5">Redirection vers GeniusPay</h3>
                   <p className="text-sm text-ink-500 max-w-xs">
-                    Consultez votre téléphone et saisissez votre code secret pour valider le paiement.
+                    Veuillez patienter, vous êtes en train d'être redirigé vers la page de paiement...
                   </p>
+                  <p className="text-xs text-ink-400 mt-4">Ne fermez pas cette page</p>
                 </div>
               )}
             </div>

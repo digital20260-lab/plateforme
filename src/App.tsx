@@ -623,7 +623,10 @@ function App() {
             </nav>
 
             <div className="flex items-center gap-2">
-              {currentUser ? (
+              {isHydrating ? (
+                // Afficher un skeleton/placeholder pendant le chargement pour éviter le flicker
+                <div className="flex items-center gap-2 px-3 py-1.5 border rounded-full bg-ink-50 border-ink-100 h-9 w-24 animate-pulse"></div>
+              ) : currentUser ? (
                 <div className="relative" ref={userMenuRef}>
                   <button
                     onClick={() => setUserMenuOpen(o => !o)}
@@ -704,10 +707,6 @@ function App() {
                     </div>
                   )}
                 </div>
-              ) : isHydrating ? (
-                // Pendant le chargement, afficher un espace vide au lieu de "Connexion/Inscription"
-                // Cela évite le flicker lors du refresh
-                null
               ) : (
                 <>
                   <button
@@ -870,10 +869,6 @@ function App() {
                 >
                   🚪 Déconnexion
                 </button>
-              ) : isHydrating ? (
-                // Pendant le chargement, afficher un espace vide au lieu de "Connexion"
-                // Cela évite le flicker lors du refresh
-                null
               ) : (
                 <div className="space-y-2">
                   <button
