@@ -149,10 +149,13 @@ export async function loadPremiumUsers() {
  * Les emails sont envoyés selon le planning (lundi/jeudi), pas en instantané.
  */
 export async function loadEmailAlertUsers() {
+  const today = new Date().toISOString().split('T')[0];
   const { data: profiles, error } = await supabaseAdmin
     .from('profiles')
-    .select('id, name, plan, alert_type, alert_email, preferred_sectors, preferred_level')
-    .eq('alert_email', true);
+    .select('id, name, plan, alert_type, alert_email, preferred_sectors, preferred_level, plan_expiry')
+    .eq('plan', 'premium')
+    .eq('alert_email', true)
+    .gte('plan_expiry', today);
 
   if (error) throw new Error(`Lecture profils alertes : ${error.message}`);
   if (!profiles?.length) return [];
