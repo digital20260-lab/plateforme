@@ -49,19 +49,13 @@ export function PaymentSuccessPage({ onGoAccount, onGoHome, onRefreshProfile, do
     return () => window.clearTimeout(t);
   }, [onRefreshProfile, isDocumentPayment, onDownloadDocument]);
 
-  // Redirection automatique après 5 secondes
+  // Redirection automatique après 3 secondes
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (isDocumentPayment) {
-        // Pour les documents, rester sur la page ou rediriger vers les documents
-        onGoAccount();
-      } else if (isSubscriptionPayment) {
-        // Pour l'abonnement, rediriger vers le compte
-        onGoAccount();
-      }
-    }, 5000);
+      onGoAccount();
+    }, 3000);
     return () => clearTimeout(timer);
-  }, [isDocumentPayment, isSubscriptionPayment, onGoAccount]);
+  }, [onGoAccount]);
 
   // Si pas de kind, ne pas afficher le contenu
   if (!kind) {

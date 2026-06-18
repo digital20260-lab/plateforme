@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  ArrowLeft, FileText, Download, CheckCircle, ShieldCheck, CreditCard
+  ArrowLeft, FileText, ShieldCheck, CreditCard
 } from 'lucide-react';
 import type { PastPaper } from './data';
 import type { User } from './AccountPage';
@@ -13,7 +13,7 @@ interface Props {
   onLogin: () => void;
 }
 
-type Step = 'details' | 'processing' | 'success';
+type Step = 'details' | 'processing';
 
 export function PaperPage({ paper, user, onBack, onLogin }: Props) {
   const [step, setStep] = useState<Step>('details');
@@ -29,8 +29,10 @@ export function PaperPage({ paper, user, onBack, onLogin }: Props) {
       const result = await buyDocument(user, paper);
       if (result?.already_purchased) {
         await downloadDocument(paper);
-        setStep('success');
+        return;
       }
+      // L'utilisateur est redirigé vers GeniusPay pour payer.
+      // Après paiement réussi, il sera redirigé vers /paiement/succes
     } catch (err: any) {
       const errorMsg = err?.message || '';
       if (errorMsg.includes('already')) {
@@ -44,17 +46,6 @@ export function PaperPage({ paper, user, onBack, onLogin }: Props) {
     }
   };
 
-  const handleDownload = async () => {
-    if (!user) {
-      onLogin();
-      return;
-    }
-    try {
-      await downloadDocument(paper);
-    } catch {
-      alert('Le document n’est pas encore disponible. Si vous venez de payer, patientez quelques instants puis réessayez.');
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#fefdfb]">
@@ -168,28 +159,6 @@ export function PaperPage({ paper, user, onBack, onLogin }: Props) {
                   <p className="text-sm text-ink-500 max-w-xs">
                     Consultez votre téléphone et saisissez votre code secret pour valider le paiement.
                   </p>
-                </div>
-              )}
-
-              {step === 'success' && (
-                <div className="p-6 py-10 flex flex-col items-center justify-center text-center">
-                  <div className="w-16 h-16 bg-forest-100 rounded-full flex items-center justify-center mb-4 text-forest-600">
-                    <CheckCircle size={32} />
-                  </div>
-                  <h3 className="font-display font-bold text-2xl text-ink-900 mb-1">Paiement réussi !</h3>
-                  <p className="text-sm text-ink-500 mb-6">Votre document est débloqué.</p>
-                  <button
-                    onClick={handleDownload}
-                    className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl inline-flex items-center justify-center gap-2"
-                  >
-                    <Download size={18} /> Télécharger le PDF (2.4 Mo)
-                  </button>
-                  <button
-                    onClick={onBack}
-                    className="mt-3 text-sm font-semibold text-ink-500 hover:text-ink-900"
-                  >
-                    Retour à la préparation
-                  </button>
                 </div>
               )}
             </div>

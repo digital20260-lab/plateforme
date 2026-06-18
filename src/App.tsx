@@ -72,7 +72,8 @@ const routeToHash = (r: Route): string => {
     case 'reset-password': return '#reset-password';
     case 'payment-success': return '/paiement/succes';
     case 'payment-error': return '/paiement/echec';
-    default: return '';
+    case 'home': return '/';
+    default: return '/';
   }
 };
 
