@@ -17,7 +17,7 @@ import { PaymentSuccessPage, PaymentErrorPage } from './PaymentResultPages';
 import { usePayment } from './hooks/usePayment';
 import { useInactivityLogout } from './hooks/useInactivityLogout';
 import { applySeo, homeSeo, listingSeo, PAGE_SEO } from './lib/seo';
-import { supabase, signIn, signUp, getMyProfile, updateMyProfile, signOut } from './lib/supabaseClient';
+import { supabase, signIn, signUp, getMyProfile, updateMyProfile, signOut, fetchListings } from './lib/supabaseClient';
 import clsx from 'clsx';
 
 const PAGE_SIZE = 9;
@@ -119,7 +119,7 @@ function App() {
   }, []);
 
   // Entités dérivées de la route
-  const selectedListing = route.page === 'listing' ? mockListings.find(l => l.id === route.id) || null : null;
+  const selectedListing = route.page === 'listing' ? listings.find(l => l.id === route.id) || null : null;
   const routeQuiz = route.page === 'quiz' ? mockQuizzes.find(q => q.id === route.id) || null : null;
   const routePaper = route.page === 'paper' ? mockPastPapers.find(p => p.id === route.id) || null : null;
   const successPaperId = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('paperId') : null;
@@ -279,6 +279,10 @@ function App() {
   const [authInfo, setAuthInfo] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
 
+  // ----- Listings chargées depuis Supabase -----
+  const [listings, setListings] = useState<Listing[]>(mockListings);
+  const [listingsLoading, setListingsLoading] = useState(false);
+
   // ----- Offres / concours sauvegardés (favoris) -----
   const [savedIds, setSavedIds] = useState<string[]>(() => {
     try {
@@ -408,6 +412,50 @@ function App() {
 
   const isAuthenticated = !!currentUser;
   const isPaid = currentUser?.plan === 'premium';
+
+  // Charger les listings depuis Supabase au montage du composant
+  useEffect(() => {
+    let isMounted = true;
+    const loadListings = async () => {
+      if (!supabase) {
+        // Supabase non configuré, utiliser les mock listings
+        return;
+      }
+      setListingsLoading(true);
+      try {
+        const data = await fetchListings({ limit: 200 });
+        if (isMounted && data && data.length > 0) {
+          // Convertir les données Supabase au format Listing
+          const convertedListings: Listing[] = data.map((l: any) => ({
+            id: l.id,
+            title: l.title,
+            ministry: l.sector || l.ministry || 'Autre',
+            type: l.type || 'emploi',
+            level: l.level || 'Non spécifié',
+            deadline: l.deadline || '2099-12-31',
+            status: l.status || 'Ouvert',
+            description: l.excerpt || l.description || '',
+            sourceUrl: l.link || l.source_url || '#',
+            company: l.company || undefined,
+            location: l.location || undefined,
+            sector: l.sector || undefined,
+            publishedAt: l.published_at || l.collected_at,
+            details: []
+          }));
+          setListings(convertedListings);
+          console.log(`✓ ${convertedListings.length} listings chargées depuis Supabase`);
+        }
+      } catch (err) {
+        console.error('Erreur lors du chargement des listings:', err);
+        // Garder les mock listings en cas d'erreur
+      } finally {
+        if (isMounted) setListingsLoading(false);
+      }
+    };
+    
+    loadListings();
+    return () => { isMounted = false; };
+  }, []);
 
   // Logique : 1 seul quiz pour le plan gratuit, illimité pour le plan Premium
   const canAttemptQuiz = (): { ok: boolean; reason?: 'auth' | 'limit' } => {
@@ -551,23 +599,23 @@ function App() {
   // Construire les options de filtres depuis les données
   const sectorOptions = useMemo(() => {
     const s = new Set<string>();
-    mockListings.filter(l => l.type === 'emploi').forEach(l => l.sector && s.add(l.sector));
+    listings.filter(l => l.type === 'emploi').forEach(l => l.sector && s.add(l.sector));
     return Array.from(s).sort();
   }, []);
   const contractOptions = useMemo(() => {
     const s = new Set<string>();
-    mockListings.filter(l => l.type === 'emploi').forEach(l => l.contractType && s.add(l.contractType));
+    listings.filter(l => l.type === 'emploi').forEach(l => l.contractType && s.add(l.contractType));
     return Array.from(s).sort();
   }, []);
   const locationOptions = useMemo(() => {
     const s = new Set<string>();
-    mockListings.filter(l => l.type === 'emploi').forEach(l => l.location && s.add(l.location));
+    listings.filter(l => l.type === 'emploi').forEach(l => l.location && s.add(l.location));
     return Array.from(s).sort();
   }, []);
 
 
   const filteredListings = useMemo(() => {
-    const list = mockListings.filter(listing => {
+    const list = listings.filter(listing => {
       const matchesTab = activeTab === 'tous' || listing.type === activeTab;
       const q = searchQuery.toLowerCase();
       const matchesSearch = !q ||
@@ -1000,7 +1048,7 @@ function App() {
           quizUsedToday={quizUsage.quizIds.length >= 1}
           isPaid={isPaid}
           initialTab={accountTab}
-          savedListings={mockListings.filter(l => savedIds.includes(l.id))}
+          savedListings={listings.filter(l => savedIds.includes(l.id))}
           onOpenListing={(id) => navigate({ page: 'listing', id })}
           onRemoveSaved={(id) => toggleSave(id)}
         />
@@ -1020,7 +1068,7 @@ function App() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-forest-700 text-white rounded-full text-[11px] font-semibold mb-5">
                 <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse"></span>
-                {mockListings.filter(l => l.publishedAt && (new Date('2026-06-10').getTime() - new Date(l.publishedAt).getTime()) / (1000 * 60 * 60 * 24) <= 7).length} nouvelles offres cette semaine
+                {listings.filter(l => l.publishedAt && (new Date('2026-06-10').getTime() - new Date(l.publishedAt).getTime()) / (1000 * 60 * 60 * 24) <= 7).length} nouvelles offres cette semaine
               </div>
 
               <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-[3.5rem] tracking-tight text-ink-900 leading-[1] mb-4">
@@ -1073,8 +1121,8 @@ function App() {
               {/* Stats inline */}
               <div className="flex items-center gap-6 sm:gap-8 mt-6 pt-6 border-t border-ink-100">
                 {[
-                  { num: mockListings.filter(l => l.type === 'emploi').length + '+', label: 'Offres', color: 'text-orange-600' },
-                  { num: mockListings.filter(l => l.type === 'concours').length, label: 'Concours', color: 'text-forest-700' },
+                  { num: listings.filter(l => l.type === 'emploi').length + '+', label: 'Offres', color: 'text-orange-600' },
+                  { num: listings.filter(l => l.type === 'concours').length, label: 'Concours', color: 'text-forest-700' },
                   { num: mockQuizzes.length, label: 'Quiz gratuits', color: 'text-ink-900' }
                 ].map((s) => (
                   <div key={s.label}>
@@ -1100,7 +1148,7 @@ function App() {
                 </div>
 
                 <div className="space-y-2.5">
-                  {[...mockListings]
+                  {[...listings]
                     .filter(l => l.publishedAt)
                     .sort((a, b) => (b.publishedAt || '').localeCompare(a.publishedAt || ''))
                     .slice(0, 4)
