@@ -107,6 +107,24 @@ function App() {
     }
   };
 
+  // Authentification + tracking quiz
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [isHydrating, setIsHydrating] = useState(true); // Prevent auth flash on refresh
+  const [authError, setAuthError] = useState('');
+  const [authInfo, setAuthInfo] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
+
+  // ----- Listings chargées depuis Supabase -----
+  const [listings, setListings] = useState<Listing[]>(mockListings);
+
+  // ----- Offres / concours sauvegardés (favoris) -----
+  const [savedIds, setSavedIds] = useState<string[]>(() => {
+    try {
+      const raw = localStorage.getItem('ecci.saved');
+      return raw ? (JSON.parse(raw) as string[]) : [];
+    } catch { return []; }
+  });
+
   // Synchroniser avec navigation back/forward et liens ancres
   useEffect(() => {
     const onPop = () => setRouteState(parseRoute());
@@ -271,26 +289,6 @@ function App() {
   }, [userMenuOpen]);
 
 
-
-  // Authentification + tracking quiz
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [isHydrating, setIsHydrating] = useState(true); // Prevent auth flash on refresh
-  const [authError, setAuthError] = useState('');
-  const [authInfo, setAuthInfo] = useState('');
-  const [authLoading, setAuthLoading] = useState(false);
-
-  // ----- Listings chargées depuis Supabase -----
-  const [listings, setListings] = useState<Listing[]>(mockListings);
-  const [listingsLoading, setListingsLoading] = useState(false);
-
-  // ----- Offres / concours sauvegardés (favoris) -----
-  const [savedIds, setSavedIds] = useState<string[]>(() => {
-    try {
-      const raw = localStorage.getItem('ecci.saved');
-      return raw ? (JSON.parse(raw) as string[]) : [];
-    } catch { return []; }
-  });
-
   const toggleSave = (id: string) => {
     if (!currentUser) {
       setAuthModal('register');
@@ -338,7 +336,7 @@ function App() {
     const initializeAuth = async () => {
       try {
         // Vérifier immédiatement si une session existe
-        const { data: { session: cachedSession } } = await supabase.auth.getSession();
+        const { data: { session: cachedSession } } = await supabase!.auth.getSession();
         
         if (isMounted && cachedSession?.user) {
           // On a une session! Créer un user minimal tout de suite pour afficher le bouton
@@ -377,7 +375,7 @@ function App() {
 
     initializeAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase!.auth.onAuthStateChange(async (_event, session) => {
       if (!session?.user) {
         if (isMounted) {
           setCurrentUser(null);
@@ -421,7 +419,6 @@ function App() {
         // Supabase non configuré, utiliser les mock listings
         return;
       }
-      setListingsLoading(true);
       try {
         const data = await fetchListings({ limit: 200 });
         if (isMounted && data && data.length > 0) {
@@ -448,8 +445,6 @@ function App() {
       } catch (err) {
         console.error('Erreur lors du chargement des listings:', err);
         // Garder les mock listings en cas d'erreur
-      } finally {
-        if (isMounted) setListingsLoading(false);
       }
     };
     
