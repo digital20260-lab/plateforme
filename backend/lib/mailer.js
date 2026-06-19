@@ -22,44 +22,6 @@ function getResend() {
 }
 
 /**
- * Vérifie si un listing est une VRAIE offre d'emploi structurée.
- * Exclut les pages génériques et annonces sans structure minimale.
- */
-export function isRealJobOffer(listing) {
-  // Patterns de pages génériques à exclure
-  const genericPatterns = [
-    /publier une offre/i,
-    /millions d.offres/i,
-    /véritable atout/i,
-    /processus de recrutement/i,
-    /un atout pour votre/i,
-    /go africa online/i,
-    /des millions/i,
-  ];
-
-  const title = (listing.title || '').toLowerCase();
-  
-  // Vérifier les patterns génériques
-  if (genericPatterns.some(p => p.test(title))) {
-    return false;
-  }
-
-  // Pour les offres d'emploi : doit avoir au moins titre + entreprise/localisation
-  if (listing.type === 'emploi') {
-    // Si pas d'entreprise ET pas de localisation précise, ignorer
-    if (!listing.company && !listing.location) {
-      return false;
-    }
-    // Si titre vide ou trop court, ignorer
-    if (!listing.title || listing.title.trim().length < 5) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-/**
  * Une annonce correspond-elle au profil d'un utilisateur ?
  *  - type d'opportunité (emploi / concours / les_deux)
  *  - secteurs préférés (si renseignés)
@@ -111,12 +73,6 @@ function buildEmailHtml(user, items, since) {
     const badgeColor = isConcours ? '#0f5028' : '#983500';
     const link = l.link || l.source_url || l.sourceUrl || '#';
     const source = l.source_name || l.sourceName || l.source_url || l.sourceUrl || 'Source officielle';
-    
-    // Afficher Entreprise · Ville pour les offres d'emploi
-    const company = l.company || (isConcours ? l.ministry : '');
-    const location = l.location || '';
-    const companyLocation = [company, location].filter(Boolean).join(' · ');
-    
     return `
     <tr>
       <td style="padding:14px 16px;border-bottom:1px solid #eee;">
@@ -125,7 +81,6 @@ function buildEmailHtml(user, items, since) {
           ${isConcours ? 'Concours' : 'Emploi'}
         </span>
         <div style="font-weight:bold;font-size:15px;margin-top:7px;color:#0e100c;line-height:1.3;">${escapeHtml(l.title)}</div>
-        ${companyLocation ? `<div style="font-size:12px;color:#666;margin-top:4px;font-weight:500;">${escapeHtml(companyLocation)}</div>` : ''}
         ${l.excerpt ? `<div style="font-size:13px;color:#555;margin-top:5px;line-height:1.45;">${escapeHtml(String(l.excerpt).slice(0, 180))}</div>` : ''}
         <div style="font-size:12px;color:#777;margin-top:6px;">Source : ${escapeHtml(source)}</div>
         <a href="${link}" style="display:inline-block;margin-top:9px;font-size:13px;font-weight:bold;color:#f15a00;text-decoration:none;">
@@ -190,10 +145,7 @@ export async function sendScheduledEmailDigest(now = new Date()) {
   if (listings.length === 0 || users.length === 0) return result;
 
   for (const user of users) {
-    const matching = listings
-      .filter(l => isRealJobOffer(l))
-      .filter(l => matchesProfile(l, user))
-      .slice(0, 25);
+    const matching = listings.filter(l => matchesProfile(l, user)).slice(0, 25);
     if (matching.length === 0) continue;
 
     const subject = matching.length === 1

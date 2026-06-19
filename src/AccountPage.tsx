@@ -6,7 +6,6 @@ import {
   Bookmark, MapPin, Briefcase, GraduationCap
 } from 'lucide-react';
 import clsx from 'clsx';
-import { updatePassword } from './lib/supabaseClient';
 
 export interface User {
   id: string;
@@ -98,7 +97,6 @@ function AccountContent({ user, onUpdate, onLogout, onBack, quizUsedToday, isPai
   const [newPwd, setNewPwd] = useState('');
   const [confirmPwd, setConfirmPwd] = useState('');
   const [pwdSaved, setPwdSaved] = useState(false);
-  const [pwdLoading, setPwdLoading] = useState(false);
   const [pwdError, setPwdError] = useState('');
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -121,35 +119,13 @@ function AccountContent({ user, onUpdate, onLogout, onBack, quizUsedToday, isPai
     setTimeout(() => setSavedPrefs(false), 2500);
   };
 
-  const changePassword = async () => {
+  const changePassword = () => {
     setPwdError('');
-    if (newPwd.length < 4) { 
-      setPwdError('Le nouveau mot de passe doit contenir au moins 4 caractères.'); 
-      return; 
-    }
-    if (newPwd !== confirmPwd) { 
-      setPwdError('Les deux mots de passe ne correspondent pas.'); 
-      return; 
-    }
-    
-    setPwdLoading(true);
-    try {
-      // Appel à l'API Supabase pour mettre à jour le mot de passe
-      await updatePassword(newPwd);
-      
-      // Succès : nettoyer les champs et afficher le message
-      setOldPwd(''); 
-      setNewPwd(''); 
-      setConfirmPwd('');
-      setPwdSaved(true);
-      setTimeout(() => setPwdSaved(false), 2500);
-    } catch (err: any) {
-      // Afficher l'erreur à l'utilisateur
-      const errorMsg = err?.message || 'Erreur lors du changement de mot de passe';
-      setPwdError(errorMsg);
-    } finally {
-      setPwdLoading(false);
-    }
+    if (newPwd.length < 4) { setPwdError('Le nouveau mot de passe doit contenir au moins 4 caractères.'); return; }
+    if (newPwd !== confirmPwd) { setPwdError('Les deux mots de passe ne correspondent pas.'); return; }
+    setOldPwd(''); setNewPwd(''); setConfirmPwd('');
+    setPwdSaved(true);
+    setTimeout(() => setPwdSaved(false), 2500);
   };
 
   const renewPlan = () => {
@@ -681,18 +657,9 @@ function AccountContent({ user, onUpdate, onLogout, onBack, quizUsedToday, isPai
                     <div className="flex items-center gap-3">
                       <button
                         onClick={changePassword}
-                        disabled={pwdLoading}
-                        className="inline-flex items-center gap-1.5 bg-ink-900 hover:bg-forest-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-full font-bold text-sm"
+                        className="inline-flex items-center gap-1.5 bg-ink-900 hover:bg-forest-700 text-white px-5 py-2.5 rounded-full font-bold text-sm"
                       >
-                        {pwdLoading ? (
-                          <>
-                            <div className="animate-spin">⟳</div> Mise à jour...
-                          </>
-                        ) : (
-                          <>
-                            <Save size={14} /> Mettre à jour
-                          </>
-                        )}
+                        <Save size={14} /> Mettre à jour
                       </button>
                       {pwdSaved && (
                         <span className="inline-flex items-center gap-1 text-sm font-semibold text-forest-700">

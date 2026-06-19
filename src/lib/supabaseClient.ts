@@ -67,19 +67,6 @@ export async function requestPasswordReset(email: string) {
   if (error) throw error;
 }
 
-/** Modifie le mot de passe de l'utilisateur connecté. */
-export async function updatePassword(newPassword: string) {
-  if (!supabase) throw new Error('supabase_not_configured');
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('non connecté');
-  
-  const { data, error } = await supabase.auth.updateUser({
-    password: newPassword
-  });
-  if (error) throw error;
-  return data;
-}
-
 /** Profil de l'utilisateur connecté (RLS : uniquement le sien). */
 export async function getMyProfile() {
   if (!supabase) throw new Error('supabase_not_configured');
