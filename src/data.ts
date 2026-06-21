@@ -593,6 +593,612 @@ export const mockListings: Listing[] = [
       }
     ]
   },
+  {
+    id: 'c10',
+    title: 'Concours ENA — Cycle Moyen (CM) Direct',
+    ministry: 'Fonction Publique et Modernisation de l\'Administration',
+    type: 'concours',
+    level: 'BAC',
+    deadline: '2026-04-07',
+    status: 'Ouvert',
+    description: 'École Nationale d\'Administration - Cycle Moyen Direct. Administration générale, Finances, Douanes, Impôts, Trésor.',
+    sourceUrl: 'ena.ci / gucaci.concours.com',
+    fee: '14 000 FCFA',
+    details: [
+      {
+        title: 'Conditions d\'accès',
+        content: [
+          'Nationalité ivoirienne',
+          'Diplôme requis : BAC ou BT reconnu (minimum)',
+          'Âge : 18 à 33 ans au 31/12/2025',
+          'Type : Concours direct (non-fonctionnaires)'
+        ]
+      },
+      {
+        title: 'Frais d\'inscription',
+        content: [
+          'Cours de préparation obligatoires : 10 000 FCFA',
+          'Kit numérique : 4 000 FCFA',
+          'Total : 14 000 FCFA (paiement en ligne via Mobile Money)'
+        ]
+      },
+      {
+        title: 'Étapes du concours',
+        content: [
+          '1. Inscription en ligne sur www.gucaci.concours.com',
+          '2. Paiement en ligne (Mobile Money)',
+          '3. Prise de vue numérique',
+          '4. Cours de préparation obligatoires en ligne',
+          '5. Présélection',
+          '6. Dépôt dossier physique si admissible',
+          '7. Épreuves écrites',
+          '8. Épreuves orales (si admissible à l\'épreuve écrite)',
+          '9. Résultats'
+        ]
+      },
+      {
+        title: 'Dossier à fournir',
+        content: [
+          'CNI ou passeport valide + original',
+          'Extrait acte de naissance (moins de 1 an) + original',
+          'Copie certifiée conforme du BAC',
+          'Diplôme(s) supérieur(s) si disponible',
+          'Certificat de nationalité + original',
+          'Casier judiciaire (moins de 3 mois)',
+          'Reçu paiement'
+        ]
+      },
+      {
+        title: 'Matières et épreuves',
+        table: {
+          headers: ['Phase / Épreuve', 'Contenu', 'Coefficient'],
+          rows: [
+            ['Phase 1 (écrite)', 'Culture générale', '1'],
+            ['Phase 1 (écrite)', 'Logique et raisonnement', '1'],
+            ['Phase 1 (écrite)', 'Aptitude numérique', '1'],
+            ['Phase 1 (écrite)', 'Organisation administrative', '1'],
+            ['Phase 2 (oral)', 'Exposé culture générale', '5'],
+            ['Phase 2 (oral)', 'Entretien avec jury', 'Sans coefficient']
+          ]
+        },
+        note: 'Les cours de préparation en ligne sont OBLIGATOIRES avant les épreuves.'
+      }
+    ]
+  },
+  {
+    id: 'c11',
+    title: 'Concours ENA — Cycle Moyen Supérieur (CMS) Direct',
+    ministry: 'Fonction Publique et Modernisation de l\'Administration',
+    type: 'concours',
+    level: 'Licence',
+    deadline: '2026-04-07',
+    status: 'Ouvert',
+    description: 'École Nationale d\'Administration - Cycle Moyen Supérieur Direct. Administration, Finances publiques, Diplomatie.',
+    sourceUrl: 'ena.ci / gucaci.concours.com',
+    fee: '14 000 FCFA',
+    details: [
+      {
+        title: 'Conditions d\'accès',
+        content: [
+          'Nationalité ivoirienne',
+          'Diplôme requis : Licence ou diplôme Bac+3 équivalent',
+          'Âge : 18 à 38 ans au 31/12/2025',
+          'Type : Concours direct (non-fonctionnaires)'
+        ]
+      },
+      {
+        title: 'Frais d\'inscription',
+        content: [
+          'Cours de préparation obligatoires : 10 000 FCFA',
+          'Kit numérique : 4 000 FCFA',
+          'Total : 14 000 FCFA + frais spécifiques selon arrêté'
+        ]
+      },
+      {
+        title: 'Étapes du concours',
+        content: ['Identiques au Cycle Moyen (CM)', 'Inscription en ligne → Paiement → Cours préparation → Présélection → Dépôt dossier → Épreuves écrites et orales → Résultats']
+      },
+      {
+        title: 'Dossier à fournir',
+        content: [
+          'CNI ou passeport valide + original',
+          'Extrait acte de naissance (moins de 1 an) + original',
+          'Copie certifiée conforme du BAC',
+          'Licence ou diplôme Bac+3 équivalent + original',
+          'Certificat de nationalité + original',
+          'Casier judiciaire (moins de 3 mois)',
+          'Reçu paiement'
+        ]
+      },
+      {
+        title: 'Matières et épreuves',
+        table: {
+          headers: ['Phase / Épreuve', 'Contenu'],
+          rows: [
+            ['Épreuve écrite 1', 'Droit public'],
+            ['Épreuve écrite 2', 'Économie'],
+            ['Épreuve écrite 3', 'Finances publiques'],
+            ['Épreuve écrite 4', 'Culture générale'],
+            ['Épreuve orale', 'Entretien avec jury']
+          ]
+        }
+      }
+    ]
+  },
+  {
+    id: 'c12',
+    title: 'Concours ENA — Cycle Supérieur (CS) Direct',
+    ministry: 'Fonction Publique et Modernisation de l\'Administration',
+    type: 'concours',
+    level: 'Master',
+    deadline: '2026-04-07',
+    status: 'Ouvert',
+    description: 'École Nationale d\'Administration - Cycle Supérieur Direct. Haute administration, Diplomatie, Inspection générale.',
+    sourceUrl: 'ena.ci / gucaci.concours.com',
+    fee: '14 000 FCFA',
+    details: [
+      {
+        title: 'Conditions d\'accès',
+        content: [
+          'Nationalité ivoirienne',
+          'Diplôme requis : Master 2, diplôme de 2e cycle supérieur ou équivalent',
+          'Âge : 18 à 43 ans au 31/12/2025',
+          'Type : Concours direct (non-fonctionnaires)'
+        ]
+      },
+      {
+        title: 'Frais d\'inscription',
+        content: [
+          'Cours de préparation obligatoires : 10 000 FCFA',
+          'Kit numérique : 4 000 FCFA',
+          'Total : 14 000 FCFA + frais spécifiques selon arrêté'
+        ]
+      },
+      {
+        title: 'Étapes du concours',
+        content: ['Identiques aux autres cycles ENA', 'Inscription → Paiement → Cours préparation → Présélection → Dépôt dossier → Épreuves écrites et orales → Résultats']
+      },
+      {
+        title: 'Dossier à fournir',
+        content: [
+          'CNI ou passeport valide + original',
+          'Extrait acte de naissance (moins de 1 an) + original',
+          'Copie certifiée conforme du BAC',
+          'Master 2 ou diplôme de 2e cycle supérieur + original',
+          'Certificat de nationalité + original',
+          'Casier judiciaire (moins de 3 mois)',
+          'Reçu paiement'
+        ]
+      },
+      {
+        title: 'Matières et épreuves',
+        table: {
+          headers: ['Épreuve', 'Discipline'],
+          rows: [
+            ['Épreuve écrite 1', 'Droit public'],
+            ['Épreuve écrite 2', 'Science politique'],
+            ['Épreuve écrite 3', 'Économie internationale'],
+            ['Épreuve orale', 'Entretien avec jury']
+          ]
+        }
+      }
+    ]
+  },
+  {
+    id: 'c13',
+    title: 'Concours Police Nationale — Agents/Gardiens de la Paix',
+    ministry: 'Intérieur et Sécurité',
+    type: 'concours',
+    level: 'BEPC',
+    deadline: '2026-12-31',
+    status: 'Bientôt',
+    description: 'Police Nationale de Côte d\'Ivoire - Agents de police (catégorie C).',
+    sourceUrl: 'police.concours.com',
+    fee: 'À consulter sur le site',
+    details: [
+      {
+        title: 'Conditions d\'accès',
+        content: [
+          'Nationalité ivoirienne',
+          'Diplôme requis : BEPC',
+          'Âge : maximum 25 ans',
+          'Taille minimale : 1,68 m (H) / 1,60 m (F)',
+          'Casier judiciaire vierge',
+          'Aptitude physique obligatoire'
+        ]
+      },
+      {
+        title: 'Étapes du concours',
+        content: [
+          '1. Inscription en ligne sur www.police.concours.com',
+          '2. Prise de vue et dépôt des dossiers',
+          '3. Validation dossier',
+          '4. Visite médicale',
+          '5. Épreuves sportives (éliminatoires)',
+          '6. Épreuves écrites',
+          '7. Épreuves orales',
+          '8. Résultats'
+        ]
+      },
+      {
+        title: 'Dossier à fournir',
+        content: [
+          'CNI ou récépissé ONECI valide + original',
+          'Acte de naissance + original',
+          'Certificat de nationalité + original',
+          '2 copies légalisées du diplôme BEPC',
+          'Casier judiciaire + original',
+          'Demande manuscrite adressée au ministre de l\'Intérieur',
+          'CV certifié sincère'
+        ]
+      },
+      {
+        title: 'Matières et épreuves',
+        table: {
+          headers: ['Épreuve', 'Contenu'],
+          rows: [
+            ['Français', 'Dictée et questions de compréhension'],
+            ['Mathématiques', 'Calculs et résolutions de problèmes'],
+            ['Éducation civique', 'Civisme et droits'],
+            ['Culture générale', 'Connaissances générales'],
+            ['Épreuves sportives', 'Éliminatoires obligatoires']
+          ]
+        }
+      }
+    ]
+  },
+  {
+    id: 'c14',
+    title: 'Concours Police Nationale — Sous-Officiers',
+    ministry: 'Intérieur et Sécurité',
+    type: 'concours',
+    level: 'BAC+2',
+    deadline: '2026-12-31',
+    status: 'Bientôt',
+    description: 'Police Nationale de Côte d\'Ivoire - Sous-Officiers de Police.',
+    sourceUrl: 'police.concours.com',
+    fee: 'À consulter sur le site',
+    details: [
+      {
+        title: 'Conditions d\'accès',
+        content: [
+          'Nationalité ivoirienne',
+          'Diplôme requis : BAC+2 minimum (DEUG, DUT, BTS, Licence incomplète)',
+          'Âge : maximum 28 ans',
+          'Taille minimale : 1,68 m (H) / 1,60 m (F)',
+          'Casier judiciaire vierge',
+          'Aptitude physique obligatoire'
+        ]
+      },
+      {
+        title: 'Dossier et étapes',
+        content: [
+          'Mêmes dossiers que concours Agents/Gardiens',
+          'Mêmes étapes : Inscription → Prise de vue → Validation → Visite médicale → Épreuves sportives → Écrit → Oral → Résultats'
+        ]
+      },
+      {
+        title: 'Matières et épreuves',
+        content: ['Français (dictée, questions)', 'Mathématiques', 'Éducation civique et morale', 'Culture générale', 'Épreuves sportives (éliminatoires)']
+      }
+    ]
+  },
+  {
+    id: 'c15',
+    title: 'Concours Police Nationale — Officiers/Commissaires',
+    ministry: 'Intérieur et Sécurité',
+    type: 'concours',
+    level: 'Master',
+    deadline: '2026-12-31',
+    status: 'Bientôt',
+    description: 'Police Nationale de Côte d\'Ivoire - Officiers et Commissaires de Police.',
+    sourceUrl: 'police.concours.com',
+    fee: 'À consulter sur le site',
+    details: [
+      {
+        title: 'Conditions d\'accès',
+        content: [
+          'Nationalité ivoirienne',
+          'Diplôme requis : Master / Bac+5 minimum',
+          'Âge : maximum 30 ans (Officiers)',
+          'Taille minimale : 1,68 m (H) / 1,60 m (F)',
+          'Casier judiciaire vierge',
+          'Aptitude physique obligatoire'
+        ]
+      },
+      {
+        title: 'Procédure',
+        content: [
+          'Mêmes dossiers et étapes que les autres grades police',
+          'Dépôt physique en chemise cartonnée à rabats',
+          'Épreuves spécifiques aux officiers avec contenu juridique et administratif'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'c16',
+    title: 'Concours Gendarmerie Nationale — Sous-Officiers Direct',
+    ministry: 'Défense',
+    type: 'concours',
+    level: 'BEPC / CAP',
+    deadline: '2026-04-19',
+    status: 'Ouvert',
+    description: 'Gendarmerie Nationale de Côte d\'Ivoire - Sous-Officiers directs (généralistes, spécialistes, musiciens).',
+    sourceUrl: 'defense.ciconcours.net',
+    fee: '30 000 FCFA',
+    details: [
+      {
+        title: 'Conditions d\'accès',
+        content: [
+          'Nationalité ivoirienne',
+          'Âge : 18 à 25 ans au 31 décembre 2026',
+          'Généralistes : BEPC',
+          'Spécialistes : CAP ou BEP',
+          'Taille minimale : 1,68 m (H)',
+          'Bonne moralité',
+          'Aptitude physique obligatoire'
+        ]
+      },
+      {
+        title: 'Frais d\'inscription',
+        content: [
+          'Préinscription en ligne : 30 000 FCFA',
+          'Paiement via Mobile Money (MTN, Orange, Wave)',
+          'Inscription sur defense.ciconcours.net'
+        ]
+      },
+      {
+        title: 'Étapes du concours',
+        content: [
+          '1. Inscription en ligne sur defense.ciconcours.net',
+          '2. Paiement 30 000 FCFA',
+          '3. Impression du reçu',
+          '4. Épreuves admissibilité',
+          '5. Visite médicale',
+          '6. Dépôt dossier + prise de vue',
+          '7. Épreuves sportives et pratiques'
+        ]
+      },
+      {
+        title: 'Dossier à fournir',
+        content: [
+          '1 copie de la CNI + original',
+          '2 copies intégrales de l\'extrait d\'acte de naissance (moins d\'1 an) + original',
+          'Certificat de nationalité + original',
+          'Diplôme requis (BEPC ou CAP selon filière)',
+          '1 extrait de casier judiciaire + original',
+          'Certificat de célibat + original',
+          'Photos d\'identité',
+          'Copie CMU ou récépissé d\'enrôlement + original',
+          'Attestation administrative (DECO ou DEXC, moins d\'1 an)',
+          'Fiche de renseignement modèle 1 et fiche de candidature sur l\'honneur (à télécharger)',
+          'Avis d\'engagement pour les candidates'
+        ]
+      },
+      {
+        title: 'Présentation du dossier physique',
+        content: ['Dépôt obligatoire en chemise cartonnée à rabats lors de la prise de photographie']
+      }
+    ]
+  },
+  {
+    id: 'c17',
+    title: 'Concours EMPT — École Militaire Préparatoire Technique',
+    ministry: 'Défense',
+    type: 'concours',
+    level: 'CM2',
+    deadline: '2026-12-31',
+    status: 'Bientôt',
+    description: 'École Militaire Préparatoire Technique de Bingerville - Formation militaire préparatoire.',
+    sourceUrl: 'defense.ciconcours.net',
+    fee: '15 000 FCFA',
+    details: [
+      {
+        title: 'Conditions d\'accès',
+        content: [
+          'Nationalité ivoirienne',
+          'Niveau : CM2 (classe en cours de scolarité)',
+          'Âge : 12 ans maximum au 31 décembre 2026 (nés en 2014 ou après)',
+          'Aptitude physique obligatoire'
+        ]
+      },
+      {
+        title: 'Frais d\'inscription',
+        content: ['Droits d\'inscription : 15 000 FCFA', 'Inscription gratuite en ligne, dépôt physique ultérieur']
+      },
+      {
+        title: 'Étapes du concours',
+        content: [
+          '1. Inscription gratuite en ligne sur defense.ciconcours.net',
+          '2. Dépôt dossier physique (centres État-Major ou villes intérieures)',
+          '3. Épreuves écrites d\'admissibilité',
+          '4. Visite médicale',
+          '5. Tests sportifs',
+          '6. 2e tour (si admissible)',
+          '7. Résultats'
+        ]
+      },
+      {
+        title: 'Dossier à fournir',
+        content: [
+          '1 copie intégrale de l\'acte de naissance + original',
+          'Certificat de nationalité + original',
+          'Certificat de fréquentation scolaire avec bulletin du 1er trimestre CM2',
+          'Numéro matricule national du candidat',
+          'Chemise à rabat jaune',
+          'Copie CMU ou récépissé d\'enrôlement + original',
+          'Photos d\'identité (prise lors du rendez-vous)'
+        ]
+      },
+      {
+        title: 'Matières et épreuves',
+        table: {
+          headers: ['Épreuve', 'Contenu'],
+          rows: [
+            ['Mathématiques', 'Calculs et résolutions niveau CM2'],
+            ['Français', 'Étude de texte'],
+            ['Français', 'Dictée'],
+            ['Éveil', 'Sciences, Histoire-Géographie'],
+            ['2e tour', 'Tests sportifs obligatoires']
+          ]
+        }
+      }
+    ]
+  },
+  {
+    id: 'c18',
+    title: 'Concours INJS — Professeur de Collège EPS/EP',
+    ministry: 'Jeunesse et Sports',
+    type: 'concours',
+    level: 'BAC',
+    deadline: '2026-12-31',
+    status: 'Bientôt',
+    description: 'Institut National de la Jeunesse et des Sports - Professeur de Collège en Éducation Physique et Sportive.',
+    sourceUrl: 'concours.injsabidjan.com',
+    fee: 'Non précisé',
+    details: [
+      {
+        title: 'Conditions d\'accès',
+        content: [
+          'Nationalité ivoirienne',
+          'Diplôme requis : BAC (toutes spécialités)',
+          'Âge : 18 à 30 ans au 31 décembre 2026',
+          'Aptitude sportive obligatoire'
+        ]
+      },
+      {
+        title: 'Filières proposées',
+        content: [
+          'Éducation Physique et Sportive (EPS)',
+          'Éducation Permanente (EP)',
+          'Spécialités sportives : Football, Basketball, Handball, Volleyball, Athlétisme, Judo, Natation, Taekwondo'
+        ]
+      },
+      {
+        title: 'Étapes du concours',
+        content: [
+          '1. Inscription en ligne',
+          '2. Visite médicale',
+          '3. Épreuves écrites',
+          '4. Épreuves pratiques sportives',
+          '5. Résultats'
+        ]
+      },
+      {
+        title: 'Dossier à fournir',
+        content: [
+          'CNI + original',
+          'Extrait d\'acte de naissance + original',
+          'Certificat de nationalité + original',
+          'Extrait de Casier judiciaire + original',
+          'Attestation de réussite au Baccalauréat'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'c19',
+    title: 'Concours IPNETP — Formateurs/Professeurs Techniques',
+    ministry: 'Enseignement Technique et Professionnel',
+    type: 'concours',
+    level: 'Variable',
+    deadline: '2026-12-31',
+    status: 'Bientôt',
+    description: 'Institut Pédagogique National de l\'Enseignement Technique et Professionnel - Formateurs/Professeurs.',
+    sourceUrl: 'ipnetp.ci / sigec.ipnetp.cloud',
+    fee: 'Non précisé',
+    details: [
+      {
+        title: 'Spécialités proposées',
+        content: [
+          'Génie Civil',
+          'Électronique',
+          'Comptabilité',
+          'Informatique',
+          'Et autres spécialités techniques selon arrêté'
+        ]
+      },
+      {
+        title: 'Conditions d\'accès',
+        content: [
+          'Nationalité ivoirienne',
+          'Diplômes requis : Variable selon spécialité',
+          'Âge : Généralement 18 à 40 ans',
+          'Type : Concours direct'
+        ]
+      },
+      {
+        title: 'Procédure générale',
+        content: [
+          'Inscription en ligne sur sigec.ipnetp.cloud',
+          'Visite médicale',
+          'Épreuves écrites et pratiques selon spécialité',
+          'Résultats'
+        ]
+      },
+      {
+        title: 'Information importante',
+        content: ['Les dossiers requis et les frais varient selon la spécialité choisie.', 'Consulter le site officiel www.ipnetp.ci pour les détails spécifiques par discipline.']
+      }
+    ]
+  },
+  {
+    id: 'c20',
+    title: 'Concours Forces Armées de Côte d\'Ivoire (FACI)',
+    ministry: 'Défense',
+    type: 'concours',
+    level: 'CEPE à Master',
+    deadline: '2026-12-31',
+    status: 'Bientôt',
+    description: 'Recrutement militaire FACI - Concours directs pour soldats, sous-officiers et officiers.',
+    sourceUrl: 'defense.ciconcours.net',
+    fee: 'Variable selon corps',
+    details: [
+      {
+        title: 'Catégories de concours',
+        table: {
+          headers: ['Grade / Catégorie', 'Diplôme requis', 'Âge maximum', 'Conditions'],
+          rows: [
+            ['Soldat de 2e classe', 'CEPE', '25 ans', 'Aptitude physique'],
+            ['Sous-officier', 'BEPC', '25 ans', 'Aptitude physique'],
+            ['Officier (via AFA/ENSOA)', 'Licence', '35 ans', 'Aptitude physique, visite médicale']
+          ]
+        }
+      },
+      {
+        title: 'Étapes du concours',
+        content: [
+          '1. Inscription en ligne sur defense.ciconcours.net',
+          '2. Paiement des frais (variable selon corps)',
+          '3. Épreuves écrites',
+          '4. Visite médicale',
+          '5. Tests sportifs',
+          '6. Résultats'
+        ]
+      },
+      {
+        title: 'Dossier à fournir',
+        content: [
+          'CNI + original',
+          'Acte de naissance + original',
+          'Certificat de nationalité + original',
+          'Diplôme requis selon grade + original',
+          'Casier judiciaire + original',
+          'Certificat médical',
+          'Photos d\'identité'
+        ]
+      },
+      {
+        title: 'Conditions particulières',
+        content: [
+          'Nationalité ivoirienne obligatoire',
+          'Aptitude physique rigoureuse',
+          'Disponibilité pour mobilisation'
+        ]
+      }
+    ]
+  },
   ...mockJobs
 ];
 
