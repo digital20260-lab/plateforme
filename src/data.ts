@@ -595,27 +595,33 @@ export const mockListings: Listing[] = [
   },
   {
     id: 'c10',
-    title: 'Concours ENA — Cycle Moyen (CM) Direct',
+    title: 'Concours ENA 2026 — Cycles directs',
     ministry: 'Fonction Publique et Modernisation de l\'Administration',
     type: 'concours',
-    level: 'BAC',
+    level: 'BAC à Master',
     deadline: '2026-04-07',
     status: 'Ouvert',
-    description: 'École Nationale d\'Administration - Cycle Moyen Direct. Administration générale, Finances, Douanes, Impôts, Trésor.',
+    description: 'École Nationale d\'Administration - Trois cycles directs : Cycle Moyen (CM), Cycle Moyen Supérieur (CMS), Cycle Supérieur (CS).',
     sourceUrl: 'ena.ci / gucaci.concours.com',
     fee: '14 000 FCFA',
     details: [
       {
-        title: 'Conditions d\'accès',
-        content: [
-          'Nationalité ivoirienne',
-          'Diplôme requis : BAC ou BT reconnu (minimum)',
-          'Âge : 18 à 33 ans au 31/12/2025',
-          'Type : Concours direct (non-fonctionnaires)'
-        ]
+        title: 'Présentation générale',
+        content: ['L\'ENA organise 3 cycles de concours directs ouverts aux non-fonctionnaires.', 'Frais et dates d\'inscription identiques pour les trois cycles.', 'Inscription en ligne sur www.gucaci.concours.com']
       },
       {
-        title: 'Frais d\'inscription',
+        title: 'Les trois cycles proposés',
+        table: {
+          headers: ['Cycle', 'Diplôme requis', 'Âge limite', 'Disciplines principales'],
+          rows: [
+            ['Cycle Moyen (CM)', 'BAC ou BT reconnu', '33 ans au 31/12/2025', 'Culture générale, Logique, Aptitude numérique, Organisation administrative'],
+            ['Cycle Moyen Supérieur (CMS)', 'Licence ou Bac+3 équivalent', '38 ans au 31/12/2025', 'Droit public, Économie, Finances publiques, Culture générale'],
+            ['Cycle Supérieur (CS)', 'Master 2 ou 2e cycle supérieur', '43 ans au 31/12/2025', 'Droit public, Science politique, Économie internationale']
+          ]
+        }
+      },
+      {
+        title: 'Frais d\'inscription (identiques pour les 3 cycles)',
         content: [
           'Cours de préparation obligatoires : 10 000 FCFA',
           'Kit numérique : 4 000 FCFA',
@@ -631,9 +637,9 @@ export const mockListings: Listing[] = [
           '4. Cours de préparation obligatoires en ligne',
           '5. Présélection',
           '6. Dépôt dossier physique si admissible',
-          '7. Épreuves écrites',
-          '8. Épreuves orales (si admissible à l\'épreuve écrite)',
-          '9. Résultats'
+          '7. Épreuves écrites d\'admissibilité',
+          '8. Épreuves orales d\'admission (si admissible)',
+          '9. Résultats et affectations'
         ]
       },
       {
@@ -642,182 +648,71 @@ export const mockListings: Listing[] = [
           'CNI ou passeport valide + original',
           'Extrait acte de naissance (moins de 1 an) + original',
           'Copie certifiée conforme du BAC',
-          'Diplôme(s) supérieur(s) si disponible',
+          'Diplôme(s) requis selon le cycle : Licence ou Master + original',
           'Certificat de nationalité + original',
           'Casier judiciaire (moins de 3 mois)',
-          'Reçu paiement'
+          'Reçu paiement en ligne'
         ]
       },
       {
-        title: 'Matières et épreuves',
-        table: {
-          headers: ['Phase / Épreuve', 'Contenu', 'Coefficient'],
-          rows: [
-            ['Phase 1 (écrite)', 'Culture générale', '1'],
-            ['Phase 1 (écrite)', 'Logique et raisonnement', '1'],
-            ['Phase 1 (écrite)', 'Aptitude numérique', '1'],
-            ['Phase 1 (écrite)', 'Organisation administrative', '1'],
-            ['Phase 2 (oral)', 'Exposé culture générale', '5'],
-            ['Phase 2 (oral)', 'Entretien avec jury', 'Sans coefficient']
-          ]
-        },
-        note: 'Les cours de préparation en ligne sont OBLIGATOIRES avant les épreuves.'
-      }
-    ]
-  },
-  {
-    id: 'c11',
-    title: 'Concours ENA — Cycle Moyen Supérieur (CMS) Direct',
-    ministry: 'Fonction Publique et Modernisation de l\'Administration',
-    type: 'concours',
-    level: 'Licence',
-    deadline: '2026-04-07',
-    status: 'Ouvert',
-    description: 'École Nationale d\'Administration - Cycle Moyen Supérieur Direct. Administration, Finances publiques, Diplomatie.',
-    sourceUrl: 'ena.ci / gucaci.concours.com',
-    fee: '14 000 FCFA',
-    details: [
-      {
-        title: 'Conditions d\'accès',
+        title: 'Conditions communes',
         content: [
-          'Nationalité ivoirienne',
-          'Diplôme requis : Licence ou diplôme Bac+3 équivalent',
-          'Âge : 18 à 38 ans au 31/12/2025',
-          'Type : Concours direct (non-fonctionnaires)'
+          'Nationalité ivoirienne obligatoire',
+          'Type de concours : direct (non-fonctionnaires uniquement)',
+          'Cours de préparation en ligne OBLIGATOIRES avant les épreuves',
+          'Épreuves orales pour l\'admission finale'
         ]
-      },
-      {
-        title: 'Frais d\'inscription',
-        content: [
-          'Cours de préparation obligatoires : 10 000 FCFA',
-          'Kit numérique : 4 000 FCFA',
-          'Total : 14 000 FCFA + frais spécifiques selon arrêté'
-        ]
-      },
-      {
-        title: 'Étapes du concours',
-        content: ['Identiques au Cycle Moyen (CM)', 'Inscription en ligne → Paiement → Cours préparation → Présélection → Dépôt dossier → Épreuves écrites et orales → Résultats']
-      },
-      {
-        title: 'Dossier à fournir',
-        content: [
-          'CNI ou passeport valide + original',
-          'Extrait acte de naissance (moins de 1 an) + original',
-          'Copie certifiée conforme du BAC',
-          'Licence ou diplôme Bac+3 équivalent + original',
-          'Certificat de nationalité + original',
-          'Casier judiciaire (moins de 3 mois)',
-          'Reçu paiement'
-        ]
-      },
-      {
-        title: 'Matières et épreuves',
-        table: {
-          headers: ['Phase / Épreuve', 'Contenu'],
-          rows: [
-            ['Épreuve écrite 1', 'Droit public'],
-            ['Épreuve écrite 2', 'Économie'],
-            ['Épreuve écrite 3', 'Finances publiques'],
-            ['Épreuve écrite 4', 'Culture générale'],
-            ['Épreuve orale', 'Entretien avec jury']
-          ]
-        }
-      }
-    ]
-  },
-  {
-    id: 'c12',
-    title: 'Concours ENA — Cycle Supérieur (CS) Direct',
-    ministry: 'Fonction Publique et Modernisation de l\'Administration',
-    type: 'concours',
-    level: 'Master',
-    deadline: '2026-04-07',
-    status: 'Ouvert',
-    description: 'École Nationale d\'Administration - Cycle Supérieur Direct. Haute administration, Diplomatie, Inspection générale.',
-    sourceUrl: 'ena.ci / gucaci.concours.com',
-    fee: '14 000 FCFA',
-    details: [
-      {
-        title: 'Conditions d\'accès',
-        content: [
-          'Nationalité ivoirienne',
-          'Diplôme requis : Master 2, diplôme de 2e cycle supérieur ou équivalent',
-          'Âge : 18 à 43 ans au 31/12/2025',
-          'Type : Concours direct (non-fonctionnaires)'
-        ]
-      },
-      {
-        title: 'Frais d\'inscription',
-        content: [
-          'Cours de préparation obligatoires : 10 000 FCFA',
-          'Kit numérique : 4 000 FCFA',
-          'Total : 14 000 FCFA + frais spécifiques selon arrêté'
-        ]
-      },
-      {
-        title: 'Étapes du concours',
-        content: ['Identiques aux autres cycles ENA', 'Inscription → Paiement → Cours préparation → Présélection → Dépôt dossier → Épreuves écrites et orales → Résultats']
-      },
-      {
-        title: 'Dossier à fournir',
-        content: [
-          'CNI ou passeport valide + original',
-          'Extrait acte de naissance (moins de 1 an) + original',
-          'Copie certifiée conforme du BAC',
-          'Master 2 ou diplôme de 2e cycle supérieur + original',
-          'Certificat de nationalité + original',
-          'Casier judiciaire (moins de 3 mois)',
-          'Reçu paiement'
-        ]
-      },
-      {
-        title: 'Matières et épreuves',
-        table: {
-          headers: ['Épreuve', 'Discipline'],
-          rows: [
-            ['Épreuve écrite 1', 'Droit public'],
-            ['Épreuve écrite 2', 'Science politique'],
-            ['Épreuve écrite 3', 'Économie internationale'],
-            ['Épreuve orale', 'Entretien avec jury']
-          ]
-        }
       }
     ]
   },
   {
     id: 'c13',
-    title: 'Concours Police Nationale — Agents/Gardiens de la Paix',
+    title: 'Concours Police Nationale 2026 — Directs',
     ministry: 'Intérieur et Sécurité',
     type: 'concours',
-    level: 'BEPC',
+    level: 'BEPC à Master',
     deadline: '2026-12-31',
     status: 'Bientôt',
-    description: 'Police Nationale de Côte d\'Ivoire - Agents de police (catégorie C).',
+    description: 'Police Nationale de Côte d\'Ivoire - Trois grades : Agents de police, Sous-Officiers, Officiers et Commissaires.',
     sourceUrl: 'police.concours.com',
     fee: 'À consulter sur le site',
     details: [
       {
-        title: 'Conditions d\'accès',
+        title: 'Présentation générale',
+        content: ['La Police Nationale organise des concours directs pour trois catégories d\'emploi.', 'Mêmes étapes et dossiers requis pour tous les grades.', 'Sélection sur tests sportifs et épreuves écrites.']
+      },
+      {
+        title: 'Les trois grades proposés',
+        table: {
+          headers: ['Grade', 'Diplôme requis', 'Âge limite', 'Taille minimale', 'Niveau'],
+          rows: [
+            ['Agents / Gardiens de la Paix', 'BEPC', '25 ans', '1,68 m (H) / 1,60 m (F)', 'Catégorie C'],
+            ['Sous-Officiers', 'BAC+2 min. (DEUG, DUT, BTS)', '28 ans', '1,68 m (H) / 1,60 m (F)', 'Catégorie B'],
+            ['Officiers / Commissaires', 'Master / Bac+5', '30 ans', '1,68 m (H) / 1,60 m (F)', 'Catégorie A']
+          ]
+        }
+      },
+      {
+        title: 'Conditions communes à tous les grades',
         content: [
           'Nationalité ivoirienne',
-          'Diplôme requis : BEPC',
-          'Âge : maximum 25 ans',
-          'Taille minimale : 1,68 m (H) / 1,60 m (F)',
           'Casier judiciaire vierge',
-          'Aptitude physique obligatoire'
+          'Aptitude physique obligatoire après validation dossier',
+          'Taille minimale : 1,68 m pour les hommes, 1,60 m pour les femmes',
+          'Bonne moralité et conduite'
         ]
       },
       {
         title: 'Étapes du concours',
         content: [
           '1. Inscription en ligne sur www.police.concours.com',
-          '2. Prise de vue et dépôt des dossiers',
+          '2. Prise de vue numérique et dépôt des dossiers',
           '3. Validation dossier',
-          '4. Visite médicale',
+          '4. Visite médicale (si dossier validé)',
           '5. Épreuves sportives (éliminatoires)',
-          '6. Épreuves écrites',
-          '7. Épreuves orales',
-          '8. Résultats'
+          '6. Épreuves écrites (si épreuves sportives réussies)',
+          '7. Épreuves orales (si admissible à l\'écrit)',
+          '8. Résultats et intégration'
         ]
       },
       {
@@ -826,159 +721,25 @@ export const mockListings: Listing[] = [
           'CNI ou récépissé ONECI valide + original',
           'Acte de naissance + original',
           'Certificat de nationalité + original',
-          '2 copies légalisées du diplôme BEPC',
+          '2 copies légalisées du diplôme requis',
           'Casier judiciaire + original',
           'Demande manuscrite adressée au ministre de l\'Intérieur',
-          'CV certifié sincère'
+          'CV certifié sincère',
+          'Dépôt en chemise cartonnée à rabats'
         ]
       },
       {
         title: 'Matières et épreuves',
         table: {
-          headers: ['Épreuve', 'Contenu'],
+          headers: ['Épreuve', 'Durée', 'Contenu'],
           rows: [
-            ['Français', 'Dictée et questions de compréhension'],
-            ['Mathématiques', 'Calculs et résolutions de problèmes'],
-            ['Éducation civique', 'Civisme et droits'],
-            ['Culture générale', 'Connaissances générales'],
-            ['Épreuves sportives', 'Éliminatoires obligatoires']
+            ['Français', '2h', 'Dictée et questions de compréhension'],
+            ['Mathématiques', 'Variable', 'Calculs et résolutions de problèmes'],
+            ['Éducation civique', 'Variable', 'Civisme et droits citoyen'],
+            ['Culture générale', 'Variable', 'Connaissances générales'],
+            ['Épreuves sportives', 'À définir', 'Éliminatoires obligatoires pour tous']
           ]
         }
-      }
-    ]
-  },
-  {
-    id: 'c14',
-    title: 'Concours Police Nationale — Sous-Officiers',
-    ministry: 'Intérieur et Sécurité',
-    type: 'concours',
-    level: 'BAC+2',
-    deadline: '2026-12-31',
-    status: 'Bientôt',
-    description: 'Police Nationale de Côte d\'Ivoire - Sous-Officiers de Police.',
-    sourceUrl: 'police.concours.com',
-    fee: 'À consulter sur le site',
-    details: [
-      {
-        title: 'Conditions d\'accès',
-        content: [
-          'Nationalité ivoirienne',
-          'Diplôme requis : BAC+2 minimum (DEUG, DUT, BTS, Licence incomplète)',
-          'Âge : maximum 28 ans',
-          'Taille minimale : 1,68 m (H) / 1,60 m (F)',
-          'Casier judiciaire vierge',
-          'Aptitude physique obligatoire'
-        ]
-      },
-      {
-        title: 'Dossier et étapes',
-        content: [
-          'Mêmes dossiers que concours Agents/Gardiens',
-          'Mêmes étapes : Inscription → Prise de vue → Validation → Visite médicale → Épreuves sportives → Écrit → Oral → Résultats'
-        ]
-      },
-      {
-        title: 'Matières et épreuves',
-        content: ['Français (dictée, questions)', 'Mathématiques', 'Éducation civique et morale', 'Culture générale', 'Épreuves sportives (éliminatoires)']
-      }
-    ]
-  },
-  {
-    id: 'c15',
-    title: 'Concours Police Nationale — Officiers/Commissaires',
-    ministry: 'Intérieur et Sécurité',
-    type: 'concours',
-    level: 'Master',
-    deadline: '2026-12-31',
-    status: 'Bientôt',
-    description: 'Police Nationale de Côte d\'Ivoire - Officiers et Commissaires de Police.',
-    sourceUrl: 'police.concours.com',
-    fee: 'À consulter sur le site',
-    details: [
-      {
-        title: 'Conditions d\'accès',
-        content: [
-          'Nationalité ivoirienne',
-          'Diplôme requis : Master / Bac+5 minimum',
-          'Âge : maximum 30 ans (Officiers)',
-          'Taille minimale : 1,68 m (H) / 1,60 m (F)',
-          'Casier judiciaire vierge',
-          'Aptitude physique obligatoire'
-        ]
-      },
-      {
-        title: 'Procédure',
-        content: [
-          'Mêmes dossiers et étapes que les autres grades police',
-          'Dépôt physique en chemise cartonnée à rabats',
-          'Épreuves spécifiques aux officiers avec contenu juridique et administratif'
-        ]
-      }
-    ]
-  },
-  {
-    id: 'c16',
-    title: 'Concours Gendarmerie Nationale — Sous-Officiers Direct',
-    ministry: 'Défense',
-    type: 'concours',
-    level: 'BEPC / CAP',
-    deadline: '2026-04-19',
-    status: 'Ouvert',
-    description: 'Gendarmerie Nationale de Côte d\'Ivoire - Sous-Officiers directs (généralistes, spécialistes, musiciens).',
-    sourceUrl: 'defense.ciconcours.net',
-    fee: '30 000 FCFA',
-    details: [
-      {
-        title: 'Conditions d\'accès',
-        content: [
-          'Nationalité ivoirienne',
-          'Âge : 18 à 25 ans au 31 décembre 2026',
-          'Généralistes : BEPC',
-          'Spécialistes : CAP ou BEP',
-          'Taille minimale : 1,68 m (H)',
-          'Bonne moralité',
-          'Aptitude physique obligatoire'
-        ]
-      },
-      {
-        title: 'Frais d\'inscription',
-        content: [
-          'Préinscription en ligne : 30 000 FCFA',
-          'Paiement via Mobile Money (MTN, Orange, Wave)',
-          'Inscription sur defense.ciconcours.net'
-        ]
-      },
-      {
-        title: 'Étapes du concours',
-        content: [
-          '1. Inscription en ligne sur defense.ciconcours.net',
-          '2. Paiement 30 000 FCFA',
-          '3. Impression du reçu',
-          '4. Épreuves admissibilité',
-          '5. Visite médicale',
-          '6. Dépôt dossier + prise de vue',
-          '7. Épreuves sportives et pratiques'
-        ]
-      },
-      {
-        title: 'Dossier à fournir',
-        content: [
-          '1 copie de la CNI + original',
-          '2 copies intégrales de l\'extrait d\'acte de naissance (moins d\'1 an) + original',
-          'Certificat de nationalité + original',
-          'Diplôme requis (BEPC ou CAP selon filière)',
-          '1 extrait de casier judiciaire + original',
-          'Certificat de célibat + original',
-          'Photos d\'identité',
-          'Copie CMU ou récépissé d\'enrôlement + original',
-          'Attestation administrative (DECO ou DEXC, moins d\'1 an)',
-          'Fiche de renseignement modèle 1 et fiche de candidature sur l\'honneur (à télécharger)',
-          'Avis d\'engagement pour les candidates'
-        ]
-      },
-      {
-        title: 'Présentation du dossier physique',
-        content: ['Dépôt obligatoire en chemise cartonnée à rabats lors de la prise de photographie']
       }
     ]
   },
