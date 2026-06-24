@@ -30,8 +30,8 @@ export const CONFIG = {
     from: process.env.RESEND_FROM || 'Emploi Concours CI <onboarding@resend.dev>'
   },
 
-  // Planning d'envoi du digest email : lundi et jeudi à 8h.
-  emailDigestCron: process.env.EMAIL_DIGEST_CRON || '0 8 * * 1,4',
+  // Planning d'envoi du digest email : lundi uniquement à 8h.
+  emailDigestCron: process.env.EMAIL_DIGEST_CRON || '0 8 * * 1',
 
   // Mettre à true pour ne PAS envoyer de vrais emails (tests)
   dryRunEmails: process.env.DRY_RUN_EMAILS !== 'false'

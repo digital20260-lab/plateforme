@@ -49,9 +49,8 @@ export function matchesProfile(listing, user) {
 
 /**
  * Calcule la fenêtre du digest :
- * - Lundi : depuis jeudi précédent 00h
- * - Jeudi : depuis lundi précédent 00h
- * - Autre jour (test manuel) : depuis 4 jours
+ * - Lundi : depuis lundi précédent 00h (offres de la semaine passée)
+ * - Autre jour (test manuel) : depuis 7 jours
  */
 export function getDigestSinceDate(now = new Date()) {
   const d = new Date(now);
@@ -59,56 +58,55 @@ export function getDigestSinceDate(now = new Date()) {
   const day = d.getDay(); // 1 = lundi, 4 = jeudi
   const since = new Date(d);
 
-  if (day === 1) since.setDate(d.getDate() - 4);       // jeudi -> lundi
-  else if (day === 4) since.setDate(d.getDate() - 3);  // lundi -> jeudi
-  else since.setDate(d.getDate() - 4);                 // test / fallback
+  if (day === 1) since.setDate(d.getDate() - 7);  // lundi -> lundi précédent (7 jours)
+  else since.setDate(d.getDate() - 7);             // test / fallback (7 jours)
 
   return since;
 }
 
 function buildEmailHtml(user, items, since) {
-  const rows = items.map(l => {
-    const isConcours = l.type === 'concours';
-    const badgeBg = isConcours ? '#d3eddc' : '#ffe0cc';
-    const badgeColor = isConcours ? '#0f5028' : '#983500';
-    const link = l.link || l.source_url || l.sourceUrl || '#';
-    const source = l.source_name || l.sourceName || l.source_url || l.sourceUrl || 'Source officielle';
-    return `
-    <tr>
-      <td style="padding:14px 16px;border-bottom:1px solid #eee;">
-        <span style="display:inline-block;font-size:10px;font-weight:bold;text-transform:uppercase;
-          padding:3px 8px;border-radius:10px;background:${badgeBg};color:${badgeColor};">
-          ${isConcours ? 'Concours' : 'Emploi'}
-        </span>
-        <div style="font-weight:bold;font-size:15px;margin-top:7px;color:#0e100c;line-height:1.3;">${escapeHtml(l.title)}</div>
-        ${l.excerpt ? `<div style="font-size:13px;color:#555;margin-top:5px;line-height:1.45;">${escapeHtml(String(l.excerpt).slice(0, 180))}</div>` : ''}
-        <div style="font-size:12px;color:#777;margin-top:6px;">Source : ${escapeHtml(source)}</div>
-        <a href="${link}" style="display:inline-block;margin-top:9px;font-size:13px;font-weight:bold;color:#f15a00;text-decoration:none;">
-          Voir l'annonce →
-        </a>
-      </td>
-    </tr>`;
-  }).join('');
+  const listings = items
+    .filter(l => l.type === 'emploi')
+    .map(l => {
+      const company = l.company || l.ministry || 'Entreprise';
+      const location = l.location || 'Lieu non spécifié';
+      const contractType = l.contractType || l.contract_type || 'Contrat';
+      const level = l.level || 'Niveau';
+      
+      return `
+    <div style="margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid #eeeeee;">
+      <div style="font-weight:bold;font-size:15px;color:#0e100c;margin-bottom:6px;">
+        ${escapeHtml(l.title)}
+      </div>
+      <div style="font-size:13px;color:#555;line-height:1.6;">
+        <div><strong>Entreprise :</strong> ${escapeHtml(company)}</div>
+        <div><strong>Localité :</strong> ${escapeHtml(location)}</div>
+        <div><strong>Type de contrat :</strong> ${escapeHtml(contractType)}</div>
+        <div><strong>Niveau requis :</strong> ${escapeHtml(level)}</div>
+      </div>
+    </div>`;
+    }).join('');
 
-  const sinceLabel = since.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
+  const firstName = user.name?.split(' ')[0] || 'ami(e)';
+  const jobCount = items.filter(l => l.type === 'emploi').length;
 
   return `
-  <div style="font-family:Arial,Helvetica,sans-serif;max-width:640px;margin:0 auto;background:#ffffff;">
+  <div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;color:#333;">
     <div style="height:4px;background:linear-gradient(90deg,#f15a00 33%,#fff 33%,#fff 66%,#1f8744 66%);"></div>
-    <div style="padding:24px 16px;">
-      <h1 style="font-size:21px;color:#0e100c;margin:0 0 4px;">Bonjour ${escapeHtml(user.name?.split(' ')[0] || '')} 👋</h1>
-      <p style="font-size:14px;color:#555;margin:0 0 18px;line-height:1.5;">
-        Voici les offres d'emploi et concours disponibles depuis le ${sinceLabel}, selon vos préférences.
+    <div style="padding:30px 24px;">
+      <h1 style="font-size:18px;color:#0e100c;margin:0 0 14px;font-weight:bold;">Bonjour ${escapeHtml(firstName)}</h1>
+      
+      <p style="font-size:14px;color:#555;margin:0 0 20px;line-height:1.6;font-weight:bold;">
+        Nous avons ${jobCount} offre${jobCount > 1 ? 's' : ''} d'emploi pour vous cette semaine :
       </p>
-      <div style="font-size:13px;font-weight:bold;color:#0f5028;margin:0 0 12px;">
-        ${items.length} opportunité${items.length > 1 ? 's' : ''} sélectionnée${items.length > 1 ? 's' : ''} pour vous
+      
+      <div style="background:#f9f9f9;padding:20px;border-radius:6px;border-left:4px solid #f15a00;">
+        ${listings}
       </div>
-      <table style="width:100%;border-collapse:collapse;background:#fff;border:1px solid #eee;border-radius:8px;overflow:hidden;">
-        ${rows}
-      </table>
-      <p style="font-size:11px;color:#999;margin-top:20px;line-height:1.4;">
+      
+      <p style="font-size:12px;color:#999;margin-top:24px;line-height:1.5;">
         Vous recevez cet email car les alertes email sont activées dans votre espace candidat Emploi Concours CI.
-        Vous pouvez modifier vos préférences à tout moment.
+        <br>Les digests sont envoyés chaque lundi avec les offres correspondant à vos préférences.
       </p>
     </div>
   </div>`;

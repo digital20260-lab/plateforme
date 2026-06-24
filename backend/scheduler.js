@@ -15,7 +15,7 @@ import { sendScheduledEmailDigest } from './lib/mailer.js';
 console.log(`🕐 Scheduler Emploi Concours CI démarré.`);
 console.log(`   Expression cron : ${CONFIG.cron}`);
 console.log(`   (toutes les 6 heures par défaut — modifiable via COLLECT_CRON)\n`);
-console.log(`   Digest email : ${CONFIG.emailDigestCron} (lundi et jeudi par défaut)\n`);
+console.log(`   Digest email : ${CONFIG.emailDigestCron} (lundi uniquement)\n`);
 
 if (!cron.validate(CONFIG.cron)) {
   console.error(`❌ Expression cron invalide : "${CONFIG.cron}"`);
